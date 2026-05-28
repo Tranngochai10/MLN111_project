@@ -457,78 +457,69 @@ export default function App() {
           {currentPage === 7 && result && (
             <motion.div
               key="result-cinematic"
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="space-y-8 w-full max-w-4xl text-center flex flex-col items-center justify-center"
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+              className="space-y-12 w-full max-w-3xl text-center flex flex-col items-center justify-center py-8"
             >
-              <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest block font-sans">
-                ĐỊNH VỊ NHẬN THỨC BẢN THÂN
-              </span>
-              <h2 className="font-heading text-3xl sm:text-5xl text-white">
-                {result.title}
-              </h2>
+              <div className="space-y-4">
+                <span className="text-[10px] font-bold text-cyan-400/75 uppercase tracking-[0.25em] block font-sans">
+                  ĐỊNH VỊ NHẬN THỨC BẢN THÂN
+                </span>
+                <h2 className="font-heading text-4xl sm:text-6xl text-white tracking-wide text-glow-blue leading-none">
+                  {result.title}
+                </h2>
+              </div>
               
               {/* 1. HỘP HIỂN THỊ PHỔ QUÁT TƯ TƯỞNG (IDEOLOGY SPECTRUM DYNAMIC BAR) */}
-              <div className="w-full max-w-lg glass p-4 rounded-xl border border-white/5 space-y-3 font-sans">
-                <div className="flex justify-between text-xs text-gray-400 font-bold uppercase">
+              <div className="w-full max-w-md space-y-2.5 font-sans">
+                <div className="flex justify-between text-[10px] text-gray-500 font-bold uppercase tracking-wider">
                   <span>Vật chất ({result.spectrum.material}%)</span>
                   <span>Tinh thần ({result.spectrum.spiritual}%)</span>
                 </div>
-                <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden flex">
-                  <div className="bg-red-500 h-full transition-all duration-1000" style={{ width: `${result.spectrum.material}%` }} />
-                  <div className="bg-cyan-500 h-full transition-all duration-1000" style={{ width: `${result.spectrum.spiritual}%` }} />
+                <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden flex">
+                  <div className="bg-red-500/80 h-full transition-all duration-1000" style={{ width: `${result.spectrum.material}%` }} />
+                  <div className="bg-cyan-500/80 h-full transition-all duration-1000" style={{ width: `${result.spectrum.spiritual}%` }} />
                 </div>
-                <p className="text-[10px] text-gray-500 italic">Biểu đồ biểu thị sự tác động qua lại biện chứng giữa hai yếu tố.</p>
               </div>
 
-              <p className="text-gray-300 text-sm sm:text-base leading-relaxed max-w-2xl font-quote">
-                {result.desc}
+              <p className="text-gray-400 text-sm sm:text-base leading-relaxed max-w-xl font-quote italic">
+                "{result.desc}"
               </p>
 
-              <div className="bg-white/5 p-5 rounded-xl border border-white/5 text-left w-full max-w-3xl">
-                <span className="text-xs font-bold text-cyan-400 uppercase tracking-widest block mb-2 font-sans flex items-center gap-1.5">
-                  <Quote size={12} /> Phân tích Marxist
+              <div className="max-w-2xl border-l-2 border-cyan-500/30 pl-6 text-left my-4">
+                <span className="text-[10px] font-bold text-cyan-400/80 uppercase tracking-widest block mb-2 font-sans">
+                  Biện chứng duy vật lịch sử
                 </span>
-                <p className="text-sm text-gray-300 italic leading-relaxed font-quote">
+                <p className="text-sm sm:text-base text-gray-300 italic leading-relaxed font-quote">
                   "{result.marx}"
                 </p>
               </div>
+              <div className="pt-6">
+                <button
+                  onClick={handleReset}
+                  className="px-8 py-3.5 bg-white/5 hover:bg-white/10 text-white rounded-full border border-white/10 text-xs font-bold uppercase tracking-widest transition-all font-sans cursor-pointer hover:border-cyan-500/30 shadow-lg shadow-black/40"
+                >
+                  Trải nghiệm lại từ đầu ↺
+                </button>
+              </div>
 
-              {/* 2. CÁC NÚT VÀ CREDIT AI NẰM CHÍNH GIỮA MÀN HÌNH */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-3xl pt-6 font-sans">
-                
-                {/* Nút Wikipedia */}
+              {/* Sub-references / Mini footer section */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 pt-12 border-t border-white/5 w-full max-w-md text-[10px] text-gray-600 font-sans">
                 <a
                   href="https://vi.wikipedia.org/wiki/Ch%E1%BB%A7_ngh%C4%A9a_duy_v%E1%BA%ADt_l%E1%BB%8Bch_s%E1%BB%AD"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 p-4 bg-white/5 hover:bg-white/10 text-cyan-400 hover:text-white rounded-xl border border-white/10 transition-all cursor-pointer font-bold text-xs uppercase tracking-wider"
+                  className="flex items-center gap-1 hover:text-cyan-400/80 transition-colors"
                 >
-                  <Compass size={14} />
-                  <span>Xem Trích Dẫn Wikipedia</span>
-                  <ArrowUpRight size={12} />
+                  <span>ⓘ Nguồn tham khảo Wikipedia</span>
+                  <ArrowUpRight size={10} />
                 </a>
-
-                {/* Hộp Trợ Lý AI Antigravity */}
-                <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-cyan-950/20 to-black/50 border border-cyan-500/20 rounded-xl text-center">
-                  <div className="flex items-center gap-1 text-[10px] font-bold text-cyan-400 uppercase tracking-wider mb-1">
-                    <Sparkles size={12} /> Trợ lý phát triển AI
-                  </div>
-                  <p className="text-[10px] text-gray-400 leading-normal">
-                    Trang web được tạo sinh bởi trợ lý lập trình <b>Antigravity AI</b>: Hỗ trợ tự động thiết kế UI, lập trình logic phản ứng và cấu hình animation 3D.
-                  </p>
+                <span className="hidden sm:inline text-white/5">|</span>
+                <div className="flex items-center gap-1 opacity-70">
+                  <span>⚡ Phát triển với sự hỗ trợ từ Antigravity AI</span>
                 </div>
-
-              </div>
-
-              <div className="flex justify-center gap-4 pt-4">
-                <button
-                  onClick={handleReset}
-                  className="px-6 py-3 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 rounded-xl border border-cyan-500/20 text-xs font-bold uppercase transition-all font-sans cursor-pointer"
-                >
-                  Trải nghiệm lại từ đầu
-                </button>
               </div>
             </motion.div>
           )}
