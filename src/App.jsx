@@ -1,52 +1,69 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Volume2, VolumeX, Quote, Sparkles, ArrowUpRight, Award, Compass, Smartphone } from 'lucide-react';
+import { Volume2, VolumeX, Quote, Sparkles, ArrowUpRight, Award, Compass, Smartphone, HelpCircle } from 'lucide-react';
 import Navbar from './components/Navbar';
 
+// CẤU HÌNH CỐT TRUYỆN MỚI: ĐA DẠNG BỐ CỤC (LAYOUT), BACKGROUND BIẾN ĐỔI THEO TỪNG CẢM XÚC STAGE
 const STORY_PAGES = [
   {
-    type: "story",
-    quote: '"Không phải ý thức quyết định đời sống,\nmà chính đời sống xã hội quyết định ý thức."',
-    translation: "Không phải nhận thức tạo ra hoàn cảnh, mà chính hoàn cảnh vật chất thực tế tạo dựng nên nhận thức của con người.",
+    type: "landing",
+    chapter: "LỜI MỞ ĐẦU",
+    title: "Bạn có thực sự tự do đưa ra quyết định?",
+    subtitle: "Tâm trí bạn tự do, hay chỉ là phản ánh của hoàn cảnh vật chất?",
+    content: "Mỗi sáng thức dậy, bạn tự chọn ly cà phê, chọn trang phục, chọn ước mơ và tin rằng bản thân đang làm chủ suy nghĩ. Nhưng triết học Marx chỉ ra một sự thật trần trụi: Tâm trí của bạn thực chất chỉ là tấm gương phản chiếu môi trường sống, điều kiện kinh tế và những áp lực vật chất xung quanh.",
+    bgImage: "/assets/stage1.jpg",
+    accentColor: "border-red-500/20",
+    glowColor: "rgba(239, 68, 68, 0.1)",
+    layout: "center", // Bố cục quote chính giữa màn hình
     author: "KARL MARX"
   },
   {
     type: "story",
-    quote: '"Nếu được lựa chọn số phận,\nbạn chọn Giàu sang cô độc hay Nghèo khó ấm áp?"',
-    translation: "Một thử nghiệm giả định kinh điển về hạnh phúc tinh thần và giới hạn của vật chất.",
-    author: "TRẢI NGHIỆM ĐỒNG THUẬN"
+    chapter: "STAGE I: TỒN TẠI VẬT CHẤT",
+    title: "Cái nôi định hình sự sống",
+    subtitle: "Bạn ăn gì, ở đâu, kiếm bao nhiêu tiền?",
+    content: "Trước khi con người bàn về lý tưởng tự do, nghệ thuật hay triết học, họ buộc phải ăn, uống, có chỗ che mưa nắng và mưu sinh hàng ngày. Đây chính là 'Tồn tại xã hội' — hạ tầng vật chất khách quan không thể chối bỏ. Nó là chiếc khuôn đầu tiên đúc nên tư duy của bạn.",
+    bgImage: "/assets/stage2.jpg",
+    accentColor: "border-amber-500/20",
+    glowColor: "rgba(245, 158, 11, 0.1)",
+    layout: "split-left", // Bố cục tách đôi, nội dung bên trái, ảnh mờ bên phải
+    author: "THỰC TẾ SINH TỒN"
   },
   {
     type: "story",
-    quote: '"Có thể có Một túp lều tranh hai trái tim vàng,\nkhi tiền nhà và đói nghèo đè nặng mỗi đêm?"',
-    translation: "Marx chỉ ra: Áp lực sinh tồn vật chất (tồn tại xã hội) luôn âm thầm định hình giới hạn của hạnh phúc tình cảm.",
-    author: "THỰC TẾ CUỘC SỐNG"
-  },
-  {
-    type: "story",
-    quote: '"Trên đỉnh cao danh vọng,\nngười giàu có thực sự tự do khỏi nỗi cô đơn?"',
-    translation: "Đủ đầy vật chất giải phóng cơ thể, nhưng môi trường cạnh tranh khốc liệt lại kiến tạo một ý thức hoài nghi cô độc.",
+    chapter: "STAGE II: NHỮNG LĂNG KÍNH KHÁC BIỆT",
+    title: "Vị thế xã hội chia rẽ nhận thức thế nào?",
+    subtitle: "Chúng ta không suy nghĩ giống nhau khi hầu bao khác nhau.",
+    content: "Một sinh viên nghèo lo toan học phí sẽ ưu tiên công việc ổn định để tồn tại. Một CEO sinh ra trong đủ đầy sẵn sàng chấp nhận rủi ro và tin tưởng vào chủ nghĩa cá nhân. Một người công nhân tăng ca 12 tiếng không còn sức để mộng mơ. Hoàn cảnh vật chất đã chia rẽ và định hình ý thức của từng người.",
+    bgImage: "/assets/stage3.jpg",
+    accentColor: "border-purple-500/20",
+    glowColor: "rgba(168, 85, 247, 0.1)",
+    layout: "split-right", // Bố cục tách đôi, nội dung bên phải, ảnh bên trái
     author: "KHỦNG HOẢNG TẦNG LỚP"
   },
   {
     type: "story",
-    quote: '"Muốn thay đổi ý thức xã hội,\ntrước hết cần thay đổi điều kiện sống vật chất."',
-    translation: "Đúc kết triết học biện chứng: Để tâm trí con người lành mạnh và hạnh phúc, trước hết hãy kiến tạo một thế giới công bằng hơn.",
-    author: "KARL MARX"
+    chapter: "STAGE III: DÒNG CHẢY THỜI ĐẠI",
+    title: "Ý thức hệ thay đổi theo lịch sử sản xuất",
+    subtitle: "Xã hội chuyển mình, tư duy dịch chuyển.",
+    content: "Chiến tranh nghèo đói tôi luyện nên lòng yêu nước và ý thức hy sinh vì tập thể. Thời bao cấp đề cao tính cộng đồng, chia sẻ tem phiếu. Đến thời đại AI và Internet, con người lại quay cuồng trong sự cô đơn, chứng FOMO và thói quen khẳng định bản thân ảo. Lịch sử vật chất thay đổi, ý thức hệ thay đổi.",
+    bgImage: "/assets/stage4.jpg",
+    accentColor: "border-blue-500/20",
+    glowColor: "rgba(59, 130, 246, 0.1)",
+    layout: "minimalist", // Bố cục tối giản, chữ siêu lớn và thoáng
+    author: "DÒNG CHẢY BIỆN CHỨNG"
   },
   {
-    type: "game",
-    title: "THỬ NGHIỆM ĐỒNG THUẬN GIÁ TRỊ SỐNG",
-    subtitle: "Câu hỏi 1: Giữa hai cuộc đời này, bạn thực lòng muốn chọn bên nào hơn?"
-  },
-  {
-    type: "shake_trigger",
-    title: "KÍCH HOẠT BIỆN CHỨNG QUY LUẬT",
-    subtitle: "Lắc nhẹ điện thoại hoặc Click mạnh vào nút kích hoạt để giải mã ý thức của bạn."
-  },
-  {
-    type: "result",
-    title: "ĐỊNH VỊ NHẬN THỨC CỦA BẠN"
+    type: "story",
+    chapter: "STAGE IV: THỰC TẠI SỐ HÓA 4.0",
+    title: "Thuật toán đang âm thầm lập trình tư duy",
+    subtitle: "Khi không gian ảo trở thành 'tồn tại xã hội' mới.",
+    content: "Bạn nghĩ bạn tự chọn nội dung giải trí? Không, thuật toán TikTok gợi ý những gì bạn nghĩ. Bạn lo sợ mất việc vì AI? Phương thức sản xuất kỹ thuật số mới đang đe dọa sinh kế vật chất, từ đó tạo ra một làn sóng lo âu và định nghĩa lại chuẩn mực hạnh phúc của cả một thế hệ.",
+    bgImage: "/assets/stage5.jpg",
+    accentColor: "border-cyan-500/20",
+    glowColor: "rgba(6, 182, 212, 0.1)",
+    layout: "center",
+    author: "TỒN TẠI SỐ HÓA"
   }
 ];
 
@@ -80,69 +97,54 @@ const QUIZ_QUESTIONS = [
 const QUIZ_RESULTS = {
   rich_lonely: {
     title: "Chủ Nghĩa Thực Tế Vật Chất",
+    spectrum: { material: 90, spiritual: 10 },
     desc: "Bạn đặt nền tảng an toàn tài chính và điều kiện vật chất lên hàng đầu. Bạn hiểu rõ rằng không có thực lực kinh tế vững chắc, mọi giá trị tinh thần đều trở nên mong manh.",
     marx: "Karl Marx viết: 'Đời sống xã hội quyết định ý thức'. Nhận thức của bạn phản ánh sự cần thiết của cơ sở vật chất đối với đời sống con người."
   },
   poor_happy: {
     title: "Chủ Nghĩa Lý Tưởng Tinh Thần",
+    spectrum: { material: 20, spiritual: 80 },
     desc: "Bạn coi trọng cảm xúc, sự gắn kết gia đình và giá trị đạo đức hơn là của cải vật chất thuần túy. Bạn là người hướng nội và giàu tình cảm.",
     marx: "Dù đề cao tinh thần, Marx vẫn cảnh báo: Nếu điều kiện vật chất quá thiếu thốn, ý thức lý tưởng này sẽ dễ dàng bị lung lay trước sóng gió kinh tế đời thực."
   },
   balanced: {
     title: "Tư Duy Biện Chứng Hài Hòa",
+    spectrum: { material: 55, spiritual: 45 },
     desc: "Bạn không lựa chọn cực đoan. Bạn thấu hiểu mối quan hệ qua lại: Vật chất là nền tảng quyết định, nhưng tinh thần có tính độc lập tương đối và tác động ngược lại đời sống vật chất.",
     marx: "Đây chính là cốt lõi của duy vật biện chứng: Tồn tại xã hội quyết định ý thức xã hội, nhưng ý thức xã hội cũng có thể thúc đẩy cải tạo tồn tại xã hội."
   }
 };
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0); // 0-4: Stages, 5: Quiz, 6: Shake, 7: Results
   const [quizIdx, setQuizIdx] = useState(0);
   const [quizAnswers, setQuizAnswers] = useState([]);
   const [result, setResult] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
-  const [hasSensorPermission, setHasSensorPermission] = useState(false);
   const audioRef = useRef(null);
 
-  // Kích hoạt xin quyền cảm biến trên các dòng máy bảo mật / iOS
-  const requestSensorPermission = () => {
-    // Kiểm tra API xin quyền đặc thù của Safari/iOS
-    if (
-      typeof DeviceMotionEvent !== 'undefined' &&
-      typeof DeviceMotionEvent.requestPermission === 'function'
-    ) {
-      DeviceMotionEvent.requestPermission()
-        .then((permissionState) => {
-          if (permissionState === 'granted') {
-            setHasSensorPermission(true);
-            alert("Đã cấp quyền cảm biến thành công! Hãy lắc điện thoại của bạn.");
-          } else {
-            alert("Quyền truy cập cảm biến bị từ chối. Bạn có thể sử dụng nút giả lập để tiếp tục.");
-          }
-        })
-        .catch((err) => {
-          console.error("Lỗi yêu cầu quyền cảm biến:", err);
-          alert("Trình duyệt yêu cầu kết nối bảo mật HTTPS để dùng cảm biến. Hãy dùng nút giả lập.");
-        });
-    } else {
-      // Đối với các dòng máy Android thường hoặc PC, quyền tự động kích hoạt
-      setHasSensorPermission(true);
-      triggerShakeAction();
+  const nextStory = () => {
+    if (currentPage < 4) {
+      setCurrentPage(currentPage + 1);
     }
   };
 
-  // Phát hiện cử chỉ lắc điện thoại (Device Motion)
+  const prevStory = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  // Cảm biến rung điện thoại
   useEffect(() => {
     let lastX = null, lastY = null, lastZ = null;
     const SHAKE_THRESHOLD = 14; 
 
     const handleMotion = (event) => {
       if (currentPage !== 6) return; 
-
       const acceleration = event.accelerationIncludingGravity;
       if (!acceleration) return;
-
       const { x, y, z } = acceleration;
 
       if (lastX !== null) {
@@ -150,43 +152,37 @@ export default function App() {
         const deltaY = Math.abs(y - lastY);
         const deltaZ = Math.abs(z - lastZ);
 
-        // Nhận diện chuyển động đột ngột hai chiều trở lên
         if ((deltaX > SHAKE_THRESHOLD && deltaY > SHAKE_THRESHOLD) || (deltaX > SHAKE_THRESHOLD && deltaZ > SHAKE_THRESHOLD) || (deltaY > SHAKE_THRESHOLD && deltaZ > SHAKE_THRESHOLD)) {
           triggerShakeAction();
         }
       }
-
       lastX = x;
       lastY = y;
       lastZ = z;
     };
 
     window.addEventListener('devicemotion', handleMotion);
-    return () => {
-      window.removeEventListener('devicemotion', handleMotion);
-    };
+    return () => window.removeEventListener('devicemotion', handleMotion);
   }, [currentPage]);
 
   const triggerShakeAction = () => {
     if (isShaking) return;
     setIsShaking(true);
-    
-    // Phản hồi rung vật lý của thiết bị
     if (navigator.vibrate) {
       navigator.vibrate([150, 100, 150]);
     }
-
     setTimeout(() => {
       setIsShaking(false);
-      setCurrentPage(7); // Đi tới kết quả
+      setCurrentPage(7);
     }, 1500);
   };
 
   const toggleMusic = () => {
     if (!audioRef.current) {
-      const audio = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3');
+      // Đổi sang bản nhạc ambient sâu thẳm trầm buồn (Cinematic Drone) để tạo cảm giác suy ngẫm
+      const audio = new Audio('https://assets.mixkit.co/music/preview/mixkit-ambient-isolation-1188.mp3');
       audio.loop = true;
-      audio.volume = 0.25;
+      audio.volume = 0.15;
       audioRef.current = audio;
     }
 
@@ -200,24 +196,6 @@ export default function App() {
           console.warn(err);
           alert("Click nhẹ vào bất kỳ điểm nào trên màn hình trước để kích hoạt âm thanh trình duyệt nhé!");
         });
-    }
-  };
-
-  const nextStory = () => {
-    if (currentPage < STORY_PAGES.length - 1) {
-      if (currentPage === 5 && !result) {
-        alert("Vui lòng hoàn thành 3 câu hỏi trắc nghiệm trước nhé!");
-        return;
-      }
-      setCurrentPage(currentPage + 1);
-    } else {
-      handleReset();
-    }
-  };
-
-  const prevStory = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
     }
   };
 
@@ -253,124 +231,178 @@ export default function App() {
     setResult(null);
   };
 
+  const currentStageInfo = STORY_PAGES[currentPage <= 4 ? currentPage : 0];
+
   return (
     <div 
-      className="relative min-h-screen bg-black text-white flex flex-col justify-between p-8 sm:p-12 font-sans select-none"
-      style={{
-        backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.96) 100%), url('/assets/bg_war.jpg')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center'
-      }}
+      className="relative min-h-screen text-gray-200 overflow-hidden select-none flex flex-col justify-between"
     >
-      
-      {/* 1. THANH ĐIỀU HƯỚNG CHẤM TRÒN GÓC PHẢI TRÊN */}
-      <div className="absolute top-8 right-8 flex items-center gap-3 z-50">
-        
-        {/* Nút nhạc đệm */}
-        <button 
-          onClick={toggleMusic}
-          className="p-2 rounded-full hover:bg-white/10 transition-colors mr-2 text-gray-400 hover:text-white cursor-pointer"
-          title="Nhạc đệm"
-        >
-          {isPlaying ? <Volume2 size={16} className="text-cyan-400 animate-pulse" /> : <VolumeX size={16} />}
-        </button>
-
-        {STORY_PAGES.map((page, idx) => (
-          <button
-            key={idx}
-            onClick={() => {
-              if (idx === 5) {
-                setQuizIdx(0);
-                setQuizAnswers([]);
-              }
-              setCurrentPage(idx);
+      {/* 1. LAYER ẢNH NỀN HỖ TRỢ HIỆU ỨNG PARALLAX & CINEMATIC ZOOM CHẬM */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentPage <= 4 ? currentStageInfo.bgImage : "/assets/stage5.jpg"}
+            initial={{ opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 0.35, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+            className="absolute inset-0 bg-cover bg-center w-full h-full animate-slow-zoom"
+            style={{
+              backgroundImage: `url('${currentPage <= 4 ? currentStageInfo.bgImage : "/assets/stage5.jpg"}')`
             }}
-            className={`w-3.5 h-3.5 rounded-full transition-all duration-300 cursor-pointer ${
-              idx === currentPage 
-                ? 'bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.8)] scale-110' 
-                : 'bg-white/20 hover:bg-white/40'
-            }`}
           />
-        ))}
+        </AnimatePresence>
+        {/* Lớp gradient đè tạo chiều sâu điện ảnh tối tối giản */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/85 to-black/60" />
+        <div className="absolute inset-0 bg-grid opacity-10" />
+        <div className="film-grain" />
       </div>
 
-      {/* Tên thương hiệu nhỏ gọn tinh tế góc trái */}
-      <div className="absolute top-8 left-8 text-xs tracking-widest font-sans font-black uppercase text-gray-500">
-        MARX<span className="text-cyan-400">MIND</span>
-      </div>
+      <Navbar />
 
-      {/* 2. KHU VỰC HIỂN THỊ CHÍNH */}
-      <div className="flex-1 flex flex-col items-center justify-center text-center max-w-4xl mx-auto my-auto relative">
+      {/* 2. NỘI DUNG CHÍNH - BIẾN ĐỔI BỐ CỤC THEO TỪNG STAGE */}
+      <div className="flex-1 flex items-center justify-center px-6 sm:px-12 py-24 relative z-10 w-full">
         <AnimatePresence mode="wait">
           
-          {/* TRANG CỐT TRUYỆN THƯỜNG (0 - 4) */}
+          {/* CỐT TRUYỆN DẪN DẮT (STAGE 0 - 4) */}
           {currentPage <= 4 && (
             <motion.div
-              key={`story-${currentPage}`}
-              initial={{ opacity: 0, y: 15 }}
+              key={`stage-layout-${currentPage}`}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.6, ease: "easeInOut" }}
-              className="space-y-8"
+              exit={{ opacity: 0, y: -30 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full max-w-6xl"
             >
-              <h1 
-                className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-wide text-cyan-400 font-sans leading-snug text-glow-blue select-text"
-                style={{
-                  textShadow: '0 0 25px rgba(34, 211, 238, 0.6), 0 0 50px rgba(34, 211, 238, 0.2)',
-                  whiteSpace: 'pre-line'
-                }}
-              >
-                {STORY_PAGES[currentPage].quote}
-              </h1>
+              {/* LAYOUT 1: CENTER (Chương mở đầu và kết) */}
+              {currentStageInfo.layout === "center" && (
+                <div className="text-center max-w-4xl mx-auto space-y-8">
+                  <span className="text-[10px] tracking-widest text-cyan-400 font-bold font-sans uppercase">
+                    {currentStageInfo.chapter}
+                  </span>
+                  <h1 className="font-heading text-3xl sm:text-5xl lg:text-6xl text-white leading-tight select-text">
+                    {currentStageInfo.title}
+                  </h1>
+                  <p className="text-gray-400 text-sm sm:text-base font-quote italic tracking-wide select-text">
+                    {currentStageInfo.subtitle}
+                  </p>
+                  <p className="text-gray-300 text-sm sm:text-lg leading-relaxed font-quote px-4 select-text">
+                    {currentStageInfo.content}
+                  </p>
+                  <div className="text-[10px] tracking-widest text-gray-500 font-sans font-semibold pt-6">
+                    — {currentStageInfo.author} —
+                  </div>
+                </div>
+              )}
 
-              <p className="text-gray-300 text-sm sm:text-lg italic font-serif leading-relaxed max-w-3xl mx-auto px-4 select-text">
-                {STORY_PAGES[currentPage].translation}
-              </p>
+              {/* LAYOUT 2: SPLIT LEFT */}
+              {currentStageInfo.layout === "split-left" && (
+                <div className="grid md:grid-cols-12 gap-8 items-center text-left">
+                  <div className="md:col-span-8 space-y-6">
+                    <span className="text-[10px] tracking-widest text-cyan-400 font-bold font-sans uppercase">
+                      {currentStageInfo.chapter}
+                    </span>
+                    <h1 className="font-heading text-3xl sm:text-5xl text-white leading-tight select-text">
+                      {currentStageInfo.title}
+                    </h1>
+                    <p className="text-gray-400 text-xs sm:text-sm font-quote italic select-text">
+                      {currentStageInfo.subtitle}
+                    </p>
+                    <p className="text-gray-300 text-sm sm:text-base leading-relaxed font-quote select-text">
+                      {currentStageInfo.content}
+                    </p>
+                  </div>
+                  <div className="md:col-span-4 hidden md:flex justify-center">
+                    <div className="w-full h-64 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-8xl grayscale opacity-30 shadow-cinematic-cyan animate-float-subtle">
+                      🏭
+                    </div>
+                  </div>
+                </div>
+              )}
 
-              <div className="text-xs sm:text-sm tracking-widest text-gray-500 font-sans font-bold uppercase pt-6">
-                — {STORY_PAGES[currentPage].author} —
-              </div>
+              {/* LAYOUT 3: SPLIT RIGHT */}
+              {currentStageInfo.layout === "split-right" && (
+                <div className="grid md:grid-cols-12 gap-8 items-center text-left">
+                  <div className="md:col-span-4 hidden md:flex justify-center">
+                    <div className="w-full h-64 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-8xl grayscale opacity-30 shadow-cinematic-red animate-float-subtle">
+                      💎
+                    </div>
+                  </div>
+                  <div className="md:col-span-8 space-y-6">
+                    <span className="text-[10px] tracking-widest text-cyan-400 font-bold font-sans uppercase">
+                      {currentStageInfo.chapter}
+                    </span>
+                    <h1 className="font-heading text-3xl sm:text-5xl text-white leading-tight select-text">
+                      {currentStageInfo.title}
+                    </h1>
+                    <p className="text-gray-400 text-xs sm:text-sm font-quote italic select-text">
+                      {currentStageInfo.subtitle}
+                    </p>
+                    <p className="text-gray-300 text-sm sm:text-base leading-relaxed font-quote select-text">
+                      {currentStageInfo.content}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* LAYOUT 4: MINIMALIST TYPOGRAPHY */}
+              {currentStageInfo.layout === "minimalist" && (
+                <div className="text-center max-w-3xl mx-auto space-y-12">
+                  <span className="text-[10px] tracking-widest text-gray-500 font-sans font-bold uppercase">
+                    {currentStageInfo.chapter}
+                  </span>
+                  <h1 className="font-heading text-4xl sm:text-6xl lg:text-7xl text-cyan-400 leading-none select-text text-glow-blue" style={{ textShadow: '0 0 15px rgba(34,211,238,0.4)' }}>
+                    {currentStageInfo.title}
+                  </h1>
+                  <p className="text-gray-300 text-base sm:text-xl font-quote leading-relaxed select-text">
+                    {currentStageInfo.content}
+                  </p>
+                </div>
+              )}
+
             </motion.div>
           )}
 
-          {/* TRANG TRÒ CHƠI TƯƠNG TÁC LỰA CHỌN (TRANG 5) */}
+          {/* TRANG QUIZ (STAGE 5) */}
           {currentPage === 5 && (
             <motion.div
-              key="game-stage"
+              key="quiz-cinematic"
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
-              className="space-y-8 w-full max-w-2xl"
+              className="w-full max-w-3xl text-left space-y-8"
             >
-              <span className="text-xs font-black tracking-widest text-red-500 uppercase block font-sans">
-                TRÒ CHƠI HOÁ THÂN LỰA CHỌN GIÁ TRỊ SỐNG
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white leading-snug font-sans">
-                {QUIZ_QUESTIONS[quizIdx].question}
-              </h2>
-              <p className="text-xs text-gray-400 font-sans">
-                Hãy lựa chọn hoàn cảnh sống phản ánh đúng mong ước sâu thẳm của bạn:
-              </p>
+              <div className="space-y-2">
+                <span className="text-[10px] font-black tracking-widest text-red-500 uppercase block font-sans">
+                  THỬ NGHIỆM ĐỒNG THUẬN GIÁ TRỊ SỐNG
+                </span>
+                <h2 className="text-2xl sm:text-4xl font-heading text-white leading-snug">
+                  {QUIZ_QUESTIONS[quizIdx].question}
+                </h2>
+                <p className="text-xs text-gray-500 font-sans">
+                  Hãy đưa ra lựa chọn thành thật nhất đại diện cho thế giới quan hiện tại của bạn:
+                </p>
+              </div>
 
               <div className="space-y-4 pt-4">
                 {QUIZ_QUESTIONS[quizIdx].options.map((opt, idx) => (
                   <button
                     key={idx}
                     onClick={() => handleSelectOption(opt.value)}
-                    className="w-full text-left p-4 rounded-xl border border-white/10 bg-white/5 hover:border-white/30 transition-all text-sm sm:text-base text-gray-300 font-semibold flex items-center justify-between font-sans cursor-pointer"
+                    className="w-full text-left p-5 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 hover:border-cyan-500/20 transition-all duration-300 text-sm sm:text-base text-gray-300 font-sans cursor-pointer flex items-center justify-between"
                   >
                     <span>{opt.text}</span>
-                    <span className="text-cyan-400">➔</span>
+                    <span className="text-cyan-400 font-bold">➔</span>
                   </button>
                 ))}
               </div>
             </motion.div>
           )}
 
-          {/* TRANG LẮC ĐIỆN THOẠI TRUNG GIAN KÍCH HOẠT (TRANG 6) */}
+          {/* TRANG SHAKE TRUNG GIAN (STAGE 6) */}
           {currentPage === 6 && (
             <motion.div
-              key="shake-stage"
+              key="shake-cinematic"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
@@ -378,97 +410,99 @@ export default function App() {
             >
               <motion.div
                 animate={isShaking ? {
-                  x: [0, -20, 20, -20, 20, 0],
-                  y: [0, 10, -10, 10, -10, 0]
-                } : { y: [0, -10, 0] }}
+                  x: [0, -15, 15, -15, 15, 0],
+                  y: [0, 8, -8, 8, -8, 0]
+                } : { y: [0, -8, 0] }}
                 transition={isShaking ? { duration: 0.8, repeat: Infinity } : { duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="w-24 h-24 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center mx-auto text-4xl text-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.2)]"
+                className="w-20 h-20 rounded-full bg-cyan-500/5 border border-cyan-500/20 flex items-center justify-center mx-auto text-3xl text-cyan-400 shadow-cinematic-cyan"
               >
-                <Smartphone size={40} className={isShaking ? "animate-bounce" : ""} />
+                <Smartphone size={32} className={isShaking ? "animate-bounce" : ""} />
               </motion.div>
 
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white leading-snug font-sans">
+              <h2 className="font-heading text-2xl sm:text-3xl text-white leading-snug">
                 KÍCH HOẠT BIỆN CHỨNG QUY LUẬT
               </h2>
               
-              <div className="space-y-2 text-sm text-gray-300 max-w-md mx-auto leading-relaxed">
+              <div className="space-y-2 text-sm text-gray-400 max-w-md mx-auto leading-relaxed font-sans">
                 <p>
                   {isShaking 
-                    ? "Đang giải mã và định hình dữ liệu ý thức của bạn..." 
-                    : "Lắc nhẹ điện thoại của bạn ngay bây giờ để mở khóa kết quả phân tích hệ tư tưởng!"
+                    ? "Đang phân tích các dữ liệu sinh tồn..." 
+                    : "Hãy lắc nhẹ thiết bị của bạn hoặc dùng nút giả lập bên dưới để kích hoạt quá trình định hình ý thức."
                   }
-                </p>
-                <p className="text-xs text-gray-500">
-                  (Nếu dùng iPhone/Safari, bạn cần nhấn nút xin quyền cảm biến ở dưới trước)
                 </p>
               </div>
 
               <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
-                {/* Nút xin cấp quyền cảm biến (Dành riêng cho các hệ điều hành bảo mật cao/iOS) */}
-                <button
-                  onClick={requestSensorPermission}
-                  className="px-6 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl border border-white/10 text-xs font-bold transition-all cursor-pointer font-sans"
-                >
-                  Xin quyền cảm biến (iOS)
-                </button>
-
-                {/* Nút giả lập lắc máy cho PC/Android hoặc nếu không muốn lắc */}
                 <button
                   onClick={triggerShakeAction}
                   disabled={isShaking}
-                  className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-500 hover:from-cyan-500 hover:to-blue-400 text-white font-extrabold text-xs uppercase tracking-widest rounded-xl transition-all cursor-pointer font-sans shadow-lg shadow-cyan-500/20"
+                  className="px-8 py-4 bg-gradient-to-r from-cyan-600 via-cyan-500 to-blue-600 text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all cursor-pointer font-sans shadow-lg shadow-cyan-500/10"
                 >
-                  {isShaking ? "Đang xử lý..." : "Giả lập lắc máy ➔"}
+                  {isShaking ? "Đang xử lý..." : "Kích hoạt định hình ➔"}
                 </button>
               </div>
             </motion.div>
           )}
 
-          {/* TRANG KẾT QUẢ PHÂN TÍCH HỆ GIÁ TRỊ (TRANG 7) */}
+          {/* TRANG KẾT QUẢ VỚI RADAR CHART / SPECTUMS VÀ AI ANALYSIS (STAGE 7) */}
           {currentPage === 7 && result && (
             <motion.div
-              key="result-stage"
+              key="result-cinematic"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="space-y-8 w-full max-w-2xl flex flex-col items-center justify-center font-sans"
+              className="space-y-8 w-full max-w-4xl text-center flex flex-col items-center justify-center"
             >
-              <span className="text-xs font-bold text-cyan-400 uppercase tracking-widest block font-sans">
+              <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest block font-sans">
                 ĐỊNH VỊ NHẬN THỨC BẢN THÂN
               </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white font-sans">
+              <h2 className="font-heading text-3xl sm:text-5xl text-white">
                 {result.title}
               </h2>
-              <p className="text-gray-300 text-sm sm:text-base leading-relaxed font-sans max-w-lg">
+              
+              {/* 1. HỘP HIỂN THỊ PHỔ QUÁT TƯ TƯỞNG (IDEOLOGY SPECTRUM DYNAMIC BAR) */}
+              <div className="w-full max-w-lg glass p-4 rounded-xl border border-white/5 space-y-3 font-sans">
+                <div className="flex justify-between text-xs text-gray-400 font-bold uppercase">
+                  <span>Vật chất ({result.spectrum.material}%)</span>
+                  <span>Tinh thần ({result.spectrum.spiritual}%)</span>
+                </div>
+                <div className="w-full bg-white/5 h-2 rounded-full overflow-hidden flex">
+                  <div className="bg-red-500 h-full transition-all duration-1000" style={{ width: `${result.spectrum.material}%` }} />
+                  <div className="bg-cyan-500 h-full transition-all duration-1000" style={{ width: `${result.spectrum.spiritual}%` }} />
+                </div>
+                <p className="text-[10px] text-gray-500 italic">Biểu đồ biểu thị sự tác động qua lại biện chứng giữa hai yếu tố.</p>
+              </div>
+
+              <p className="text-gray-300 text-sm sm:text-base leading-relaxed max-w-2xl font-quote">
                 {result.desc}
               </p>
 
-              <div className="bg-white/5 p-5 rounded-xl border border-white/10 text-left w-full">
+              <div className="bg-white/5 p-5 rounded-xl border border-white/5 text-left w-full max-w-3xl">
                 <span className="text-xs font-bold text-cyan-400 uppercase tracking-widest block mb-2 font-sans flex items-center gap-1.5">
                   <Quote size={12} /> Phân tích Marxist
                 </span>
-                <p className="text-sm text-gray-300 italic leading-relaxed font-serif">
+                <p className="text-sm text-gray-300 italic leading-relaxed font-quote">
                   "{result.marx}"
                 </p>
               </div>
 
-              {/* KHU VỰC CÁC NÚT TRUY CẬP WIKIPEDIA VÀ CREDIT AI NẰM Ở CHÍNH GIỮA MÀN HÌNH */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full pt-6">
+              {/* 2. CÁC NÚT VÀ CREDIT AI NẰM CHÍNH GIỮA MÀN HÌNH */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-3xl pt-6 font-sans">
                 
                 {/* Nút Wikipedia */}
                 <a
                   href="https://vi.wikipedia.org/wiki/Ch%E1%BB%A7_ngh%C4%A9a_duy_v%E1%BA%ADt_l%E1%BB%8Bch_s%E1%BB%AD"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 p-4 bg-white/5 hover:bg-white/10 text-cyan-400 hover:text-white rounded-xl border border-white/10 transition-all cursor-pointer font-sans font-bold text-xs uppercase tracking-wider"
+                  className="flex items-center justify-center gap-2 p-4 bg-white/5 hover:bg-white/10 text-cyan-400 hover:text-white rounded-xl border border-white/10 transition-all cursor-pointer font-bold text-xs uppercase tracking-wider"
                 >
                   <Compass size={14} />
                   <span>Xem Trích Dẫn Wikipedia</span>
                   <ArrowUpRight size={12} />
                 </a>
 
-                {/* Hộp Thông Tin Antigravity AI Hỗ Trợ */}
-                <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-cyan-950/20 to-black/50 border border-cyan-500/20 rounded-xl font-sans text-center">
+                {/* Hộp Trợ Lý AI Antigravity */}
+                <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-cyan-950/20 to-black/50 border border-cyan-500/20 rounded-xl text-center">
                   <div className="flex items-center gap-1 text-[10px] font-bold text-cyan-400 uppercase tracking-wider mb-1">
                     <Sparkles size={12} /> Trợ lý phát triển AI
                   </div>
@@ -482,9 +516,9 @@ export default function App() {
               <div className="flex justify-center gap-4 pt-4">
                 <button
                   onClick={handleReset}
-                  className="px-6 py-3 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 rounded-xl border border-cyan-500/30 text-xs font-extrabold uppercase transition-all font-sans cursor-pointer"
+                  className="px-6 py-3 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 rounded-xl border border-cyan-500/20 text-xs font-bold uppercase transition-all font-sans cursor-pointer"
                 >
-                  Trải nghiệm lại câu chuyện
+                  Trải nghiệm lại từ đầu
                 </button>
               </div>
             </motion.div>
@@ -494,8 +528,8 @@ export default function App() {
       </div>
 
       {/* 3. ĐIỀU HƯỚNG TRANG DƯỚI CHÂN TRANG */}
-      <div className="w-full flex items-center justify-between text-xs tracking-widest text-gray-600 font-sans font-bold uppercase relative z-10 pt-4 border-t border-white/5">
-        {currentPage > 0 ? (
+      <div className="w-full flex items-center justify-between text-xs tracking-widest text-gray-500 font-sans font-bold uppercase relative z-10 p-6 border-t border-white/5 bg-black/40 backdrop-blur-sm">
+        {currentPage > 0 && currentPage < 5 ? (
           <button 
             onClick={prevStory}
             className="hover:text-white transition-colors cursor-pointer"
@@ -505,24 +539,24 @@ export default function App() {
         ) : <div />}
 
         <div>
-          {currentPage + 1} / {STORY_PAGES.length}
+          {currentPage <= 4 ? `${currentPage + 1} / ${STORY_PAGES.length}` : ""}
         </div>
 
-        {currentPage < STORY_PAGES.length - 1 ? (
+        {currentPage < 4 ? (
           <button 
             onClick={nextStory}
             className="hover:text-white transition-colors cursor-pointer"
           >
             TIẾP THEO →
           </button>
-        ) : (
+        ) : currentPage === 4 ? (
           <button 
-            onClick={handleReset}
+            onClick={() => setCurrentPage(5)}
             className="text-cyan-400 hover:text-white transition-colors animate-pulse cursor-pointer"
           >
-            TRẢI NGHIỆM LẠI ↺
+            BẮT ĐẦU ĐỒNG THUẬN ➔
           </button>
-        )}
+        ) : <div />}
       </div>
 
     </div>
