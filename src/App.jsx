@@ -102,15 +102,43 @@ export default function App() {
   const [result, setResult] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
+  const [hasSensorPermission, setHasSensorPermission] = useState(false);
   const audioRef = useRef(null);
+
+  // Kích hoạt xin quyền cảm biến trên các dòng máy bảo mật / iOS
+  const requestSensorPermission = () => {
+    // Kiểm tra API xin quyền đặc thù của Safari/iOS
+    if (
+      typeof DeviceMotionEvent !== 'undefined' &&
+      typeof DeviceMotionEvent.requestPermission === 'function'
+    ) {
+      DeviceMotionEvent.requestPermission()
+        .then((permissionState) => {
+          if (permissionState === 'granted') {
+            setHasSensorPermission(true);
+            alert("Đã cấp quyền cảm biến thành công! Hãy lắc điện thoại của bạn.");
+          } else {
+            alert("Quyền truy cập cảm biến bị từ chối. Bạn có thể sử dụng nút giả lập để tiếp tục.");
+          }
+        })
+        .catch((err) => {
+          console.error("Lỗi yêu cầu quyền cảm biến:", err);
+          alert("Trình duyệt yêu cầu kết nối bảo mật HTTPS để dùng cảm biến. Hãy dùng nút giả lập.");
+        });
+    } else {
+      // Đối với các dòng máy Android thường hoặc PC, quyền tự động kích hoạt
+      setHasSensorPermission(true);
+      triggerShakeAction();
+    }
+  };
 
   // Phát hiện cử chỉ lắc điện thoại (Device Motion)
   useEffect(() => {
     let lastX = null, lastY = null, lastZ = null;
-    const SHAKE_THRESHOLD = 15; // Ngưỡng lực lắc
+    const SHAKE_THRESHOLD = 14; 
 
     const handleMotion = (event) => {
-      if (currentPage !== 6) return; // Chỉ kích hoạt khi ở Stage lắc trung gian
+      if (currentPage !== 6) return; 
 
       const acceleration = event.accelerationIncludingGravity;
       if (!acceleration) return;
@@ -122,6 +150,7 @@ export default function App() {
         const deltaY = Math.abs(y - lastY);
         const deltaZ = Math.abs(z - lastZ);
 
+        // Nhận diện chuyển động đột ngột hai chiều trở lên
         if ((deltaX > SHAKE_THRESHOLD && deltaY > SHAKE_THRESHOLD) || (deltaX > SHAKE_THRESHOLD && deltaZ > SHAKE_THRESHOLD) || (deltaY > SHAKE_THRESHOLD && deltaZ > SHAKE_THRESHOLD)) {
           triggerShakeAction();
         }
@@ -132,9 +161,7 @@ export default function App() {
       lastZ = z;
     };
 
-    if (window.DeviceMotionEvent) {
-      window.addEventListener('devicemotion', handleMotion);
-    }
+    window.addEventListener('devicemotion', handleMotion);
     return () => {
       window.removeEventListener('devicemotion', handleMotion);
     };
@@ -144,14 +171,14 @@ export default function App() {
     if (isShaking) return;
     setIsShaking(true);
     
-    // Tạo hiệu ứng rung phản hồi nhẹ
+    // Phản hồi rung vật lý của thiết bị
     if (navigator.vibrate) {
       navigator.vibrate([150, 100, 150]);
     }
 
     setTimeout(() => {
       setIsShaking(false);
-      setCurrentPage(7); // Chuyển tiếp tới trang kết quả
+      setCurrentPage(7); // Đi tới kết quả
     }, 1500);
   };
 
@@ -178,7 +205,6 @@ export default function App() {
 
   const nextStory = () => {
     if (currentPage < STORY_PAGES.length - 1) {
-      // Bỏ qua trang trắc nghiệm nếu chưa trả lời xong
       if (currentPage === 5 && !result) {
         alert("Vui lòng hoàn thành 3 câu hỏi trắc nghiệm trước nhé!");
         return;
@@ -216,7 +242,7 @@ export default function App() {
         }
       });
       setResult(QUIZ_RESULTS[maxVal]);
-      setCurrentPage(6); // Chuyển tới Stage lắc trung gian
+      setCurrentPage(6); 
     }
   };
 
@@ -364,20 +390,35 @@ export default function App() {
               <h2 className="text-2xl sm:text-3xl font-extrabold text-white leading-snug font-sans">
                 KÍCH HOẠT BIỆN CHỨNG QUY LUẬT
               </h2>
-              <p className="text-sm text-gray-300 max-w-md mx-auto leading-relaxed">
-                {isShaking 
-                  ? "Đang giải mã và định hình dữ liệu ý thức của bạn..." 
-                  : "Nghiêng lắc nhẹ điện thoại của bạn ngay bây giờ để mở khóa kết quả phân tích hệ tư tưởng!"
-                }
-              </p>
+              
+              <div className="space-y-2 text-sm text-gray-300 max-w-md mx-auto leading-relaxed">
+                <p>
+                  {isShaking 
+                    ? "Đang giải mã và định hình dữ liệu ý thức của bạn..." 
+                    : "Lắc nhẹ điện thoại của bạn ngay bây giờ để mở khóa kết quả phân tích hệ tư tưởng!"
+                  }
+                </p>
+                <p className="text-xs text-gray-500">
+                  (Nếu dùng iPhone/Safari, bạn cần nhấn nút xin quyền cảm biến ở dưới trước)
+                </p>
+              </div>
 
-              <div className="pt-4">
+              <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
+                {/* Nút xin cấp quyền cảm biến (Dành riêng cho các hệ điều hành bảo mật cao/iOS) */}
+                <button
+                  onClick={requestSensorPermission}
+                  className="px-6 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl border border-white/10 text-xs font-bold transition-all cursor-pointer font-sans"
+                >
+                  Xin quyền cảm biến (iOS)
+                </button>
+
+                {/* Nút giả lập lắc máy cho PC/Android hoặc nếu không muốn lắc */}
                 <button
                   onClick={triggerShakeAction}
                   disabled={isShaking}
-                  className="px-8 py-3.5 bg-gradient-to-r from-cyan-600 to-blue-500 hover:from-cyan-500 hover:to-blue-400 text-white font-extrabold text-xs uppercase tracking-widest rounded-xl transition-all cursor-pointer font-sans shadow-lg shadow-cyan-500/20"
+                  className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-500 hover:from-cyan-500 hover:to-blue-400 text-white font-extrabold text-xs uppercase tracking-widest rounded-xl transition-all cursor-pointer font-sans shadow-lg shadow-cyan-500/20"
                 >
-                  {isShaking ? "Đang xử lý..." : "Nhấn để giả lập lắc máy (PC) ➔"}
+                  {isShaking ? "Đang xử lý..." : "Giả lập lắc máy ➔"}
                 </button>
               </div>
             </motion.div>
