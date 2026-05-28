@@ -120,9 +120,7 @@ export default function App() {
   const [quizIdx, setQuizIdx] = useState(0);
   const [quizAnswers, setQuizAnswers] = useState([]);
   const [result, setResult] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
-  const audioRef = useRef(null);
 
   const nextStory = () => {
     if (currentPage < 4) {
@@ -135,6 +133,39 @@ export default function App() {
       setCurrentPage(currentPage - 1);
     }
   };
+
+  // Tự động xin cấp quyền cảm biến chuyển động (iOS 13+) ngay khi chạm/click màn hình lần đầu
+  useEffect(() => {
+    const requestMotionPermission = async () => {
+      if (
+        typeof DeviceMotionEvent !== 'undefined' &&
+        typeof DeviceMotionEvent.requestPermission === 'function'
+      ) {
+        try {
+          const state = await DeviceMotionEvent.requestPermission();
+          if (state === 'granted') {
+            console.log('Quyền cảm biến chuyển động đã được cấp.');
+          }
+        } catch (err) {
+          console.warn('Lỗi xin quyền cảm biến:', err);
+        }
+      }
+    };
+
+    const handleFirstInteraction = () => {
+      requestMotionPermission();
+      window.removeEventListener('click', handleFirstInteraction);
+      window.removeEventListener('touchstart', handleFirstInteraction);
+    };
+
+    window.addEventListener('click', handleFirstInteraction);
+    window.addEventListener('touchstart', handleFirstInteraction);
+
+    return () => {
+      window.removeEventListener('click', handleFirstInteraction);
+      window.removeEventListener('touchstart', handleFirstInteraction);
+    };
+  }, []);
 
   // Cảm biến rung điện thoại
   useEffect(() => {
@@ -175,28 +206,6 @@ export default function App() {
       setIsShaking(false);
       setCurrentPage(7);
     }, 1500);
-  };
-
-  const toggleMusic = () => {
-    if (!audioRef.current) {
-      // Đổi sang bản nhạc ambient sâu thẳm trầm buồn (Cinematic Drone) để tạo cảm giác suy ngẫm
-      const audio = new Audio('https://assets.mixkit.co/music/preview/mixkit-ambient-isolation-1188.mp3');
-      audio.loop = true;
-      audio.volume = 0.15;
-      audioRef.current = audio;
-    }
-
-    if (isPlaying) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    } else {
-      audioRef.current.play()
-        .then(() => setIsPlaying(true))
-        .catch(err => {
-          console.warn(err);
-          alert("Click nhẹ vào bất kỳ điểm nào trên màn hình trước để kích hoạt âm thanh trình duyệt nhé!");
-        });
-    }
   };
 
   const handleSelectOption = (val) => {
@@ -528,13 +537,14 @@ export default function App() {
       </div>
 
       {/* 3. ĐIỀU HƯỚNG TRANG DƯỚI CHÂN TRANG */}
-      <div className="w-full flex items-center justify-between text-xs tracking-widest text-gray-500 font-sans font-bold uppercase relative z-10 p-6 border-t border-white/5 bg-black/40 backdrop-blur-sm">
+      <div className="w-full flex items-center justify-between text-[10px] sm:text-xs tracking-widest text-gray-500 font-sans font-bold uppercase relative z-10 p-5 sm:p-6 border-t border-white/5 bg-black/40 backdrop-blur-sm">
         {currentPage > 0 && currentPage < 5 ? (
           <button 
             onClick={prevStory}
             className="hover:text-white transition-colors cursor-pointer"
           >
-            ← BƯỚC TRƯỚC
+            <span className="hidden sm:inline">← BƯỚC TRƯỚC</span>
+            <span className="sm:hidden">← LÙI LẠI</span>
           </button>
         ) : <div />}
 
@@ -547,14 +557,16 @@ export default function App() {
             onClick={nextStory}
             className="hover:text-white transition-colors cursor-pointer"
           >
-            TIẾP THEO →
+            <span className="hidden sm:inline">TIẾP THEO →</span>
+            <span className="sm:hidden">TIẾP →</span>
           </button>
         ) : currentPage === 4 ? (
           <button 
             onClick={() => setCurrentPage(5)}
             className="text-cyan-400 hover:text-white transition-colors animate-pulse cursor-pointer"
           >
-            BẮT ĐẦU ĐỒNG THUẬN ➔
+            <span className="hidden sm:inline">BẮT ĐẦU ĐỒNG THUẬN ➔</span>
+            <span className="sm:hidden">ĐỒNG THUẬN ➔</span>
           </button>
         ) : <div />}
       </div>
