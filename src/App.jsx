@@ -1,567 +1,806 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Volume2, VolumeX, Quote, Sparkles, ArrowUpRight, Award, Compass, Smartphone, HelpCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { 
+  Volume2, VolumeX, Quote, 
+  ArrowLeftRight
+} from 'lucide-react';
 import Navbar from './components/Navbar';
 
-// CẤU HÌNH CỐT TRUYỆN MỚI: ĐA DẠNG BỐ CỤC (LAYOUT), BACKGROUND BIẾN ĐỔI THEO TỪNG CẢM XÚC STAGE
-const STORY_PAGES = [
-  {
-    type: "landing",
-    chapter: "LỜI MỞ ĐẦU",
-    title: "Bạn có thực sự tự do đưa ra quyết định?",
-    subtitle: "Tâm trí bạn tự do, hay chỉ là phản ánh của hoàn cảnh vật chất?",
-    content: "Mỗi sáng thức dậy, bạn tự chọn ly cà phê, chọn trang phục, chọn ước mơ và tin rằng bản thân đang làm chủ suy nghĩ. Nhưng triết học Marx chỉ ra một sự thật trần trụi: Tâm trí của bạn thực chất chỉ là tấm gương phản chiếu môi trường sống, điều kiện kinh tế và những áp lực vật chất xung quanh.",
-    bgImage: "/assets/stage1.jpg",
-    accentColor: "border-red-500/20",
-    glowColor: "rgba(239, 68, 68, 0.1)",
-    layout: "center", // Bố cục quote chính giữa màn hình
-    author: "KARL MARX"
-  },
-  {
-    type: "story",
-    chapter: "STAGE I: TỒN TẠI VẬT CHẤT",
-    title: "Cái nôi định hình sự sống",
-    subtitle: "Bạn ăn gì, ở đâu, kiếm bao nhiêu tiền?",
-    content: "Trước khi con người bàn về lý tưởng tự do, nghệ thuật hay triết học, họ buộc phải ăn, uống, có chỗ che mưa nắng và mưu sinh hàng ngày. Đây chính là 'Tồn tại xã hội' — hạ tầng vật chất khách quan không thể chối bỏ. Nó là chiếc khuôn đầu tiên đúc nên tư duy của bạn.",
-    bgImage: "/assets/stage2.jpg",
-    accentColor: "border-amber-500/20",
-    glowColor: "rgba(245, 158, 11, 0.1)",
-    layout: "split-left", // Bố cục tách đôi, nội dung bên trái, ảnh mờ bên phải
-    author: "THỰC TẾ SINH TỒN"
-  },
-  {
-    type: "story",
-    chapter: "STAGE II: NHỮNG LĂNG KÍNH KHÁC BIỆT",
-    title: "Vị thế xã hội chia rẽ nhận thức thế nào?",
-    subtitle: "Chúng ta không suy nghĩ giống nhau khi hầu bao khác nhau.",
-    content: "Một sinh viên nghèo lo toan học phí sẽ ưu tiên công việc ổn định để tồn tại. Một CEO sinh ra trong đủ đầy sẵn sàng chấp nhận rủi ro và tin tưởng vào chủ nghĩa cá nhân. Một người công nhân tăng ca 12 tiếng không còn sức để mộng mơ. Hoàn cảnh vật chất đã chia rẽ và định hình ý thức của từng người.",
-    bgImage: "/assets/stage3.jpg",
-    accentColor: "border-purple-500/20",
-    glowColor: "rgba(168, 85, 247, 0.1)",
-    layout: "split-right", // Bố cục tách đôi, nội dung bên phải, ảnh bên trái
-    author: "KHỦNG HOẢNG TẦNG LỚP"
-  },
-  {
-    type: "story",
-    chapter: "STAGE III: DÒNG CHẢY THỜI ĐẠI",
-    title: "Ý thức hệ thay đổi theo lịch sử sản xuất",
-    subtitle: "Xã hội chuyển mình, tư duy dịch chuyển.",
-    content: "Chiến tranh nghèo đói tôi luyện nên lòng yêu nước và ý thức hy sinh vì tập thể. Thời bao cấp đề cao tính cộng đồng, chia sẻ tem phiếu. Đến thời đại AI và Internet, con người lại quay cuồng trong sự cô đơn, chứng FOMO và thói quen khẳng định bản thân ảo. Lịch sử vật chất thay đổi, ý thức hệ thay đổi.",
-    bgImage: "/assets/stage4.jpg",
-    accentColor: "border-blue-500/20",
-    glowColor: "rgba(59, 130, 246, 0.1)",
-    layout: "minimalist", // Bố cục tối giản, chữ siêu lớn và thoáng
-    author: "DÒNG CHẢY BIỆN CHỨNG"
-  },
-  {
-    type: "story",
-    chapter: "STAGE IV: THỰC TẠI SỐ HÓA 4.0",
-    title: "Thuật toán đang âm thầm lập trình tư duy",
-    subtitle: "Khi không gian ảo trở thành 'tồn tại xã hội' mới.",
-    content: "Bạn nghĩ bạn tự chọn nội dung giải trí? Không, thuật toán TikTok gợi ý những gì bạn nghĩ. Bạn lo sợ mất việc vì AI? Phương thức sản xuất kỹ thuật số mới đang đe dọa sinh kế vật chất, từ đó tạo ra một làn sóng lo âu và định nghĩa lại chuẩn mực hạnh phúc của cả một thế hệ.",
-    bgImage: "/assets/stage5.jpg",
-    accentColor: "border-cyan-500/20",
-    glowColor: "rgba(6, 182, 212, 0.1)",
-    layout: "center",
-    author: "TỒN TẠI SỐ HÓA"
-  }
-];
+// Dynamic Materialist Dialectics Canvas Background
+function DialecticsCanvas() {
+  const canvasRef = useRef(null);
 
-const QUIZ_QUESTIONS = [
-  {
-    question: "1. Giữa hai cuộc đời này, bạn thực lòng muốn chọn bên nào hơn?",
-    options: [
-      { text: "Giàu có vượt trội, tự do tài chính nhưng chấp nhận cô đơn lạnh lẽo", value: "rich_lonely" },
-      { text: "Nghèo khó, vất vả mưu sinh nhưng gia đình luôn hạnh phúc, ấm áp", value: "poor_happy" },
-      { text: "Nỗ lực hành động để cân bằng cả hai, không chấp nhận cực đoan nào", value: "balanced" }
-    ]
-  },
-  {
-    question: "2. Bạn nghĩ yếu tố nào có sức mạnh lớn nhất để thay đổi tư duy một con người?",
-    options: [
-      { text: "Tăng thu nhập, cải thiện điều kiện sống và nhà ở tốt hơn (Thay đổi Vật chất)", value: "rich_lonely" },
-      { text: "Đọc sách, giáo dục đạo đức và rèn luyện ý chí tinh thần (Thay đổi Ý thức)", value: "poor_happy" },
-      { text: "Kết hợp cả cải tạo môi trường sống lẫn giáo dục nhận thức học tập", value: "balanced" }
-    ]
-  },
-  {
-    question: "3. Khi gặp áp lực lớn trong cuộc sống, bạn thường tìm kiếm sự giải tỏa từ đâu?",
-    options: [
-      { text: "Mua sắm, ăn uống xa xỉ hoặc tập trung đi kiếm tiền nhiều hơn", value: "rich_lonely" },
-      { text: "Tìm đến người thân chia sẻ, trò chuyện hoặc khóc để vơi đi", value: "poor_happy" },
-      { text: "Đi du lịch một mình, thiền định hoặc nghe nhạc để suy ngẫm", value: "balanced" }
-    ]
-  }
-];
-
-const QUIZ_RESULTS = {
-  rich_lonely: {
-    title: "Chủ Nghĩa Thực Tế Vật Chất",
-    spectrum: { material: 90, spiritual: 10 },
-    desc: "Bạn đặt nền tảng an toàn tài chính và điều kiện vật chất lên hàng đầu. Bạn hiểu rõ rằng không có thực lực kinh tế vững chắc, mọi giá trị tinh thần đều trở nên mong manh.",
-    marx: "Karl Marx viết: 'Đời sống xã hội quyết định ý thức'. Nhận thức của bạn phản ánh sự cần thiết của cơ sở vật chất đối với đời sống con người."
-  },
-  poor_happy: {
-    title: "Chủ Nghĩa Lý Tưởng Tinh Thần",
-    spectrum: { material: 20, spiritual: 80 },
-    desc: "Bạn coi trọng cảm xúc, sự gắn kết gia đình và giá trị đạo đức hơn là của cải vật chất thuần túy. Bạn là người hướng nội và giàu tình cảm.",
-    marx: "Dù đề cao tinh thần, Marx vẫn cảnh báo: Nếu điều kiện vật chất quá thiếu thốn, ý thức lý tưởng này sẽ dễ dàng bị lung lay trước sóng gió kinh tế đời thực."
-  },
-  balanced: {
-    title: "Tư Duy Biện Chứng Hài Hòa",
-    spectrum: { material: 55, spiritual: 45 },
-    desc: "Bạn không lựa chọn cực đoan. Bạn thấu hiểu mối quan hệ qua lại: Vật chất là nền tảng quyết định, nhưng tinh thần có tính độc lập tương đối và tác động ngược lại đời sống vật chất.",
-    marx: "Đây chính là cốt lõi của duy vật biện chứng: Tồn tại xã hội quyết định ý thức xã hội, nhưng ý thức xã hội cũng có thể thúc đẩy cải tạo tồn tại xã hội."
-  }
-};
-
-export default function App() {
-  const [currentPage, setCurrentPage] = useState(0); // 0-4: Stages, 5: Quiz, 6: Shake, 7: Results
-  const [quizIdx, setQuizIdx] = useState(0);
-  const [quizAnswers, setQuizAnswers] = useState([]);
-  const [result, setResult] = useState(null);
-  const [isShaking, setIsShaking] = useState(false);
-
-  const nextStory = () => {
-    if (currentPage < 4) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const prevStory = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  // Tự động xin cấp quyền cảm biến chuyển động (iOS 13+) ngay khi chạm/click màn hình lần đầu
   useEffect(() => {
-    const requestMotionPermission = async () => {
-      if (
-        typeof DeviceMotionEvent !== 'undefined' &&
-        typeof DeviceMotionEvent.requestPermission === 'function'
-      ) {
-        try {
-          const state = await DeviceMotionEvent.requestPermission();
-          if (state === 'granted') {
-            console.log('Quyền cảm biến chuyển động đã được cấp.');
-          }
-        } catch (err) {
-          console.warn('Lỗi xin quyền cảm biến:', err);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let animationId;
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const handleResize = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', handleResize);
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = height + Math.random() * 100;
+        this.size = Math.random() * 2 + 1;
+        this.speedY = -(Math.random() * 0.5 + 0.2);
+        this.speedX = (Math.random() - 0.5) * 0.2;
+        this.color = Math.random() > 0.5 ? 'rgba(239, 68, 68, ' : 'rgba(6, 182, 212, ';
+        this.alpha = Math.random() * 0.35 + 0.1;
+      }
+
+      update(scrollSpeed) {
+        this.y += this.speedY - scrollSpeed * 0.4;
+        this.x += this.speedX;
+
+        if (this.y < -10) {
+          this.y = height + Math.random() * 20;
+          this.x = Math.random() * width;
+        }
+        if (this.x < 0 || this.x > width) {
+          this.speedX = -this.speedX;
         }
       }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color + this.alpha + ')';
+        ctx.fill();
+      }
+    }
+
+    const particleCount = Math.min(50, Math.floor((width * height) / 30000));
+    const particles = Array.from({ length: particleCount }, () => new Particle());
+
+    let lastScrollY = window.scrollY;
+    let scrollSpeed = 0;
+
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      scrollSpeed = Math.abs(currentScrollY - lastScrollY) * 0.08;
+      lastScrollY = currentScrollY;
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    const animate = () => {
+      ctx.clearRect(0, 0, width, height);
+      scrollSpeed *= 0.93;
+
+      particles.forEach((p) => {
+        p.update(scrollSpeed);
+        p.draw();
+      });
+
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 130) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            const alpha = (1 - dist / 130) * 0.07 * (particles[i].y / height);
+            ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+
+      animationId = requestAnimationFrame(animate);
     };
 
-    const handleFirstInteraction = () => {
-      requestMotionPermission();
-      window.removeEventListener('click', handleFirstInteraction);
-      window.removeEventListener('touchstart', handleFirstInteraction);
-    };
-
-    window.addEventListener('click', handleFirstInteraction);
-    window.addEventListener('touchstart', handleFirstInteraction);
+    animate();
 
     return () => {
-      window.removeEventListener('click', handleFirstInteraction);
-      window.removeEventListener('touchstart', handleFirstInteraction);
+      cancelAnimationFrame(animationId);
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
-  // Cảm biến rung điện thoại
-  useEffect(() => {
-    let lastX = null, lastY = null, lastZ = null;
-    const SHAKE_THRESHOLD = 14; 
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-0" />;
+}
 
-    const handleMotion = (event) => {
-      if (currentPage !== 6) return; 
-      const acceleration = event.accelerationIncludingGravity;
-      if (!acceleration) return;
-      const { x, y, z } = acceleration;
+export default function App() {
+  const [isMuted, setIsMuted] = useState(true);
+  const [activePillar, setActivePillar] = useState(0); 
+  const [activeLogicStep, setActiveLogicStep] = useState(0); 
+  const [sliderPosition, setSliderPosition] = useState(50); 
+  const [isDraggingSlider, setIsDraggingSlider] = useState(false);
+  const [activeSection, setActiveSection] = useState(0);
+  const containerRef = useRef(null);
 
-      if (lastX !== null) {
-        const deltaX = Math.abs(x - lastX);
-        const deltaY = Math.abs(y - lastY);
-        const deltaZ = Math.abs(z - lastZ);
+  // Audio refs
+  const audioCtxRef = useRef(null);
+  const oscillatorsRef = useRef([]);
 
-        if ((deltaX > SHAKE_THRESHOLD && deltaY > SHAKE_THRESHOLD) || (deltaX > SHAKE_THRESHOLD && deltaZ > SHAKE_THRESHOLD) || (deltaY > SHAKE_THRESHOLD && deltaZ > SHAKE_THRESHOLD)) {
-          triggerShakeAction();
-        }
-      }
-      lastX = x;
-      lastY = y;
-      lastZ = z;
-    };
-
-    window.addEventListener('devicemotion', handleMotion);
-    return () => window.removeEventListener('devicemotion', handleMotion);
-  }, [currentPage]);
-
-  const triggerShakeAction = () => {
-    if (isShaking) return;
-    setIsShaking(true);
-    if (navigator.vibrate) {
-      navigator.vibrate([150, 100, 150]);
+  const toggleSound = () => {
+    if (!isMuted) {
+      stopAmbientMusic();
+      setIsMuted(true);
+    } else {
+      playAmbientMusic();
+      setIsMuted(false);
     }
-    setTimeout(() => {
-      setIsShaking(false);
-      setCurrentPage(7);
-    }, 1500);
   };
 
-  const handleSelectOption = (val) => {
-    const nextAnswers = [...quizAnswers, val];
-    setQuizAnswers(nextAnswers);
+  const playAmbientMusic = () => {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      const audioCtx = new AudioContext();
+      audioCtxRef.current = audioCtx;
 
-    if (quizIdx < QUIZ_QUESTIONS.length - 1) {
-      setQuizIdx(quizIdx + 1);
-    } else {
-      const counts = nextAnswers.reduce((acc, curr) => {
-        acc[curr] = (acc[curr] || 0) + 1;
-        return acc;
-      }, {});
-      
-      let maxVal = "balanced";
-      let maxCount = 0;
-      Object.entries(counts).forEach(([k, v]) => {
-        if (v > maxCount) {
-          maxCount = v;
-          maxVal = k;
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(320, audioCtx.currentTime);
+
+      const gainNode = audioCtx.createGain();
+      gainNode.gain.setValueAtTime(0.04, audioCtx.currentTime);
+
+      filter.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      const freqs = [65.41, 98.00, 130.81, 155.56]; 
+      oscillatorsRef.current = freqs.map(freq => {
+        const osc = audioCtx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        
+        const oscGain = audioCtx.createGain();
+        oscGain.gain.setValueAtTime(0.12 / freqs.length, audioCtx.currentTime);
+        
+        osc.connect(oscGain);
+        oscGain.connect(filter);
+        osc.start();
+        return osc;
+      });
+    } catch (e) {
+      console.warn(e);
+    }
+  };
+
+  const stopAmbientMusic = () => {
+    if (oscillatorsRef.current.length > 0) {
+      oscillatorsRef.current.forEach(osc => {
+        try { osc.stop(); } catch(e) {}
+      });
+      oscillatorsRef.current = [];
+    }
+    if (audioCtxRef.current) {
+      try { audioCtxRef.current.close(); } catch(e) {}
+      audioCtxRef.current = null;
+    }
+  };
+
+  useEffect(() => {
+    const handleScrollDetect = () => {
+      const scrollPosition = window.scrollY + window.innerHeight / 2;
+      const sections = document.querySelectorAll('section');
+      sections.forEach((sec, idx) => {
+        if (scrollPosition >= sec.offsetTop && scrollPosition < sec.offsetTop + sec.offsetHeight) {
+          setActiveSection(idx);
         }
       });
-      setResult(QUIZ_RESULTS[maxVal]);
-      setCurrentPage(6); 
+    };
+    window.addEventListener('scroll', handleScrollDetect, { passive: true });
+    return () => {
+      stopAmbientMusic();
+      window.removeEventListener('scroll', handleScrollDetect);
+    };
+  }, []);
+
+  const handleSliderMouseMove = (e) => {
+    if (!isDraggingSlider || !containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const pct = Math.max(15, Math.min(85, (x / rect.width) * 100));
+    setSliderPosition(pct);
+  };
+
+  const handleSliderTouchMove = (e) => {
+    if (!containerRef.current || e.touches.length === 0) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = e.touches[0].clientX - rect.left;
+    const pct = Math.max(15, Math.min(85, (x / rect.width) * 100));
+    setSliderPosition(pct);
+  };
+
+  const scrollToSection = (idx) => {
+    const sections = document.querySelectorAll('section');
+    if (sections[idx]) {
+      sections[idx].scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  const handleReset = () => {
-    setCurrentPage(0);
-    setQuizIdx(0);
-    setQuizAnswers([]);
-    setResult(null);
-  };
+  // Pillars for Section 4 - EXACT user Vietnamese wording
+  const pillars = [
+    {
+      title: "Phương thức sản xuất vật chất",
+      subtitle: "Cách chúng ta làm ra của cải - Yếu tố quyết định nhất",
+      desc: "Cách chúng ta làm ra của cải - Yếu tố quyết định nhất đối với sự sinh tồn, vận động và phát triển của toàn bộ cấu trúc đời sống xã hội.",
+      icon: "⚙️"
+    },
+    {
+      title: "Điều kiện tự nhiên - Địa lý",
+      subtitle: "Khí hậu, môi trường",
+      desc: "Khí hậu, môi trường tự nhiên bao quanh, đóng vai trò là tiền đề vật chất tự nhiên bắt buộc cho sự sinh tồn và sản xuất của con người.",
+      icon: "🌍"
+    },
+    {
+      title: "Dân số và mật độ dân số",
+      subtitle: "Quy mô và sự phân bố dân cư",
+      desc: "Quy mô, tốc độ tăng trưởng và mật độ phân bố dân số - điều kiện thiết yếu cho sự tồn tại và phát triển của xã hội.",
+      icon: "👥"
+    }
+  ];
 
-  const currentStageInfo = STORY_PAGES[currentPage <= 4 ? currentPage : 0];
+  // Logic steps for Section 6 - EXACT user content
+  const logicSteps = [
+    {
+      title: "Điều kiện sống",
+      desc: "Hoàn cảnh môi trường tự nhiên, xã hội ban đầu bao quanh đời sống con người.",
+      icon: "🌡️"
+    },
+    {
+      title: "Hoàn cảnh kinh tế",
+      desc: "Cơ cấu kinh tế, thu nhập, phương thức sản xuất thay đổi dưới tác động của điều kiện sống.",
+      icon: "📊"
+    },
+    {
+      title: "Quan hệ xã hội",
+      desc: "Mối tương tác giữa người với người trong lao động sản xuất và sinh hoạt cộng đồng.",
+      icon: "🤝"
+    },
+    {
+      title: "Cách suy nghĩ",
+      desc: "Nhận thức, thế giới quan riêng biệt hình thành trong đầu óc của mỗi cá nhân.",
+      icon: "💡"
+    },
+    {
+      title: "Ý thức xã hội",
+      desc: "Đúc kết chung thành các hệ tư tưởng, thói quen và tâm lý cộng đồng của toàn bộ xã hội.",
+      icon: "🔮"
+    }
+  ];
+
+  const sectionNames = [
+    "Tiêu đề",
+    "Tương tác phản biện",
+    "Marx Nhận định",
+    "Tồn tại xã hội",
+    "Ý thức xã hội",
+    "Sơ đồ logic",
+    "Mạng xã hội",
+    "Trí tuệ nhân tạo (AI)"
+  ];
 
   return (
     <div 
-      className="relative min-h-screen text-gray-200 overflow-hidden select-none flex flex-col justify-between"
+      className="relative min-h-screen text-gray-200 overflow-x-hidden bg-black flex flex-col justify-between selection:bg-red-500 selection:text-white"
+      onMouseMove={handleSliderMouseMove}
+      onMouseUp={() => setIsDraggingSlider(false)}
+      onTouchMove={handleSliderTouchMove}
+      onTouchEnd={() => setIsDraggingSlider(false)}
     >
-      {/* 1. LAYER ẢNH NỀN HỖ TRỢ HIỆU ỨNG PARALLAX & CINEMATIC ZOOM CHẬM */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentPage <= 4 ? currentStageInfo.bgImage : "/assets/stage5.jpg"}
-            initial={{ opacity: 0, scale: 1.05 }}
-            animate={{ opacity: 0.35, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
-            className="absolute inset-0 bg-cover bg-center w-full h-full animate-slow-zoom"
-            style={{
-              backgroundImage: `url('${currentPage <= 4 ? currentStageInfo.bgImage : "/assets/stage5.jpg"}')`
-            }}
-          />
-        </AnimatePresence>
-        {/* Lớp gradient đè tạo chiều sâu điện ảnh tối tối giản */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/85 to-black/60" />
-        <div className="absolute inset-0 bg-grid opacity-10" />
+      {/* Dialectics Background + Atmospheric overlays */}
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <DialecticsCanvas />
+        <div className="absolute inset-0 bg-grid opacity-[0.06]" />
         <div className="film-grain" />
+        
+        {/* Soft atmospheric background lights */}
+        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-red-500/[0.03] blur-[150px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-[700px] h-[700px] rounded-full bg-cyan-500/[0.03] blur-[180px]" />
       </div>
 
       <Navbar />
 
-      {/* 2. NỘI DUNG CHÍNH - BIẾN ĐỔI BỐ CỤC THEO TỪNG STAGE */}
-      <div className="flex-1 flex items-center justify-center px-6 sm:px-12 py-24 relative z-10 w-full">
-        <AnimatePresence mode="wait">
+      {/* Dynamic Vertical Flow Axis Line */}
+      <div className="fixed left-12 md:left-24 top-0 bottom-0 w-[1px] bg-gradient-to-b from-red-500/20 via-white/10 to-cyan-500/20 z-10 hidden lg:block">
+        <div className="absolute w-[5px] h-[50px] bg-gradient-to-b from-red-500 to-cyan-500 -left-2 rounded-full shadow-lg shadow-red-500/50" style={{
+          top: `${(activeSection / 7) * 90 + 5}%`,
+          transition: 'top 0.8s cubic-bezier(0.16, 1, 0.3, 1)'
+        }} />
+      </div>
+
+      {/* Floating Side Exhibition Navigator */}
+      <div className="fixed right-8 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-4 bg-black/40 backdrop-blur-md p-4 rounded-2xl border border-white/5 shadow-2xl">
+        {sectionNames.map((name, idx) => (
+          <button
+            key={idx}
+            onClick={() => scrollToSection(idx)}
+            className="group flex items-center justify-end gap-3 text-right cursor-pointer"
+          >
+            <span className={`text-[10px] tracking-widest font-bold uppercase transition-all duration-300 origin-right scale-90 opacity-0 group-hover:opacity-100 group-hover:scale-100 ${
+              activeSection === idx ? "text-cyan-400 opacity-80" : "text-gray-500"
+            }`}>
+              {name}
+            </span>
+            <div className={`w-2.5 h-2.5 rounded-full border transition-all duration-300 ${
+              activeSection === idx 
+              ? "bg-cyan-400 border-cyan-400 scale-125 shadow-lg shadow-cyan-400/50" 
+              : "border-white/25 bg-transparent hover:border-white"
+            }`} />
+          </button>
+        ))}
+      </div>
+
+      {/* Ambient Music Control Button */}
+      <div className="fixed top-4 right-6 z-50 flex items-center gap-3">
+        <button
+          onClick={toggleSound}
+          className="w-10 h-10 rounded-full border border-white/10 bg-black/60 backdrop-blur-md flex items-center justify-center text-gray-400 hover:text-white hover:border-white/30 transition-all cursor-pointer shadow-lg animate-float-subtle"
+          title={isMuted ? "Bật nhạc nền Ambient" : "Tắt nhạc nền Ambient"}
+        >
+          {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} className="text-cyan-400 animate-pulse" />}
+        </button>
+      </div>
+
+      {/* Main content container */}
+      <div className="relative z-10 w-full flex flex-col items-center pl-0 lg:pl-32 pr-0 lg:pr-12">
+        
+        {/* SLIDE 1: Title */}
+        <section className="min-h-screen w-full max-w-5xl mx-auto flex flex-col justify-center px-6 py-24 space-y-12 relative">
           
-          {/* CỐT TRUYỆN DẪN DẮT (STAGE 0 - 4) */}
-          {currentPage <= 4 && (
-            <motion.div
-              key={`stage-layout-${currentPage}`}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -30 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full max-w-6xl"
+
+          <motion.div
+            initial={{ opacity: 0, y: 35 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="text-left space-y-8"
+          >
+            <div className="flex items-center gap-3">
+              <div className="h-[1px] w-8 bg-red-500" />
+              <span className="text-[10px] tracking-[0.4em] text-red-500 font-bold uppercase">
+                BẠN NGHĨ RA SUY NGHĨ CỦA MÌNH, HAY HOÀN CẢNH ĐÃ "LẬP TRÌNH" NÓ?
+              </span>
+            </div>
+            
+            <h1 className="font-heading text-4xl sm:text-6xl lg:text-7xl text-white leading-none font-black select-text text-glow-red">
+              BẠN NGHĨ RA SUY NGHĨ CỦA MÌNH,<br />
+              HAY HOÀN CẢNH ĐÃ <span className="text-red-500">"LẬP TRÌNH"</span> NÓ?
+            </h1>
+          </motion.div>
+
+          <div className="flex justify-start pt-6">
+            <motion.div 
+              animate={{ y: [0, 8, 0] }}
+              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+              className="text-xs text-gray-600 font-sans tracking-widest flex items-center gap-3 cursor-pointer"
+              onClick={() => scrollToSection(1)}
             >
-              {/* LAYOUT 1: CENTER (Chương mở đầu và kết) */}
-              {currentStageInfo.layout === "center" && (
-                <div className="text-center max-w-4xl mx-auto space-y-8">
-                  <span className="text-[10px] tracking-widest text-cyan-400 font-bold font-sans uppercase">
-                    {currentStageInfo.chapter}
-                  </span>
-                  <h1 className="font-heading text-3xl sm:text-5xl lg:text-6xl text-white leading-tight select-text">
-                    {currentStageInfo.title}
-                  </h1>
-                  <p className="text-gray-400 text-sm sm:text-base font-quote italic tracking-wide select-text">
-                    {currentStageInfo.subtitle}
-                  </p>
-                  <p className="text-gray-300 text-sm sm:text-lg leading-relaxed font-quote px-4 select-text">
-                    {currentStageInfo.content}
-                  </p>
-                  <div className="text-[10px] tracking-widest text-gray-500 font-sans font-semibold pt-6">
-                    — {currentStageInfo.author} —
-                  </div>
-                </div>
-              )}
-
-              {/* LAYOUT 2: SPLIT LEFT */}
-              {currentStageInfo.layout === "split-left" && (
-                <div className="grid md:grid-cols-12 gap-8 items-center text-left">
-                  <div className="md:col-span-8 space-y-6">
-                    <span className="text-[10px] tracking-widest text-cyan-400 font-bold font-sans uppercase">
-                      {currentStageInfo.chapter}
-                    </span>
-                    <h1 className="font-heading text-3xl sm:text-5xl text-white leading-tight select-text">
-                      {currentStageInfo.title}
-                    </h1>
-                    <p className="text-gray-400 text-xs sm:text-sm font-quote italic select-text">
-                      {currentStageInfo.subtitle}
-                    </p>
-                    <p className="text-gray-300 text-sm sm:text-base leading-relaxed font-quote select-text">
-                      {currentStageInfo.content}
-                    </p>
-                  </div>
-                  <div className="md:col-span-4 hidden md:flex justify-center">
-                    <div className="w-full h-64 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-8xl grayscale opacity-30 shadow-cinematic-cyan animate-float-subtle">
-                      🏭
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* LAYOUT 3: SPLIT RIGHT */}
-              {currentStageInfo.layout === "split-right" && (
-                <div className="grid md:grid-cols-12 gap-8 items-center text-left">
-                  <div className="md:col-span-4 hidden md:flex justify-center">
-                    <div className="w-full h-64 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-8xl grayscale opacity-30 shadow-cinematic-red animate-float-subtle">
-                      💎
-                    </div>
-                  </div>
-                  <div className="md:col-span-8 space-y-6">
-                    <span className="text-[10px] tracking-widest text-cyan-400 font-bold font-sans uppercase">
-                      {currentStageInfo.chapter}
-                    </span>
-                    <h1 className="font-heading text-3xl sm:text-5xl text-white leading-tight select-text">
-                      {currentStageInfo.title}
-                    </h1>
-                    <p className="text-gray-400 text-xs sm:text-sm font-quote italic select-text">
-                      {currentStageInfo.subtitle}
-                    </p>
-                    <p className="text-gray-300 text-sm sm:text-base leading-relaxed font-quote select-text">
-                      {currentStageInfo.content}
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {/* LAYOUT 4: MINIMALIST TYPOGRAPHY */}
-              {currentStageInfo.layout === "minimalist" && (
-                <div className="text-center max-w-3xl mx-auto space-y-12">
-                  <span className="text-[10px] tracking-widest text-gray-500 font-sans font-bold uppercase">
-                    {currentStageInfo.chapter}
-                  </span>
-                  <h1 className="font-heading text-4xl sm:text-6xl lg:text-7xl text-cyan-400 leading-none select-text text-glow-blue" style={{ textShadow: '0 0 15px rgba(34,211,238,0.4)' }}>
-                    {currentStageInfo.title}
-                  </h1>
-                  <p className="text-gray-300 text-base sm:text-xl font-quote leading-relaxed select-text">
-                    {currentStageInfo.content}
-                  </p>
-                </div>
-              )}
-
+              <span className="text-red-500">↓</span>
+              <span>CUỘN XUỐNG ĐỂ TIẾP TỤC</span>
             </motion.div>
-          )}
+          </div>
+        </section>
 
-          {/* TRANG QUIZ (STAGE 5) */}
-          {currentPage === 5 && (
-            <motion.div
-              key="quiz-cinematic"
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              className="w-full max-w-3xl text-left space-y-8"
+        {/* SLIDE 2: Interactive Question */}
+        <section className="min-h-screen w-full max-w-5xl mx-auto flex flex-col justify-center px-6 py-24 space-y-12 relative">
+          
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-left space-y-4"
+          >
+            <div className="flex items-center gap-3">
+              <div className="h-[1px] w-8 bg-cyan-400" />
+              <span className="text-xs tracking-[0.3em] text-cyan-400 font-bold uppercase block">
+                CÂU HỎI TƯƠNG TÁC PHẢN BIỆN
+              </span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-heading text-white leading-snug">
+              “Tại sao cùng là con người, nhưng tư duy, lối sống, cách nhìn nhận về thành công của người sống ở thành thị và nông thôn lại thường khác nhau?”
+            </h2>
+            <p className="text-xs sm:text-sm text-gray-400 font-sans">
+              Kéo thanh trượt bên dưới để trực quan sự khác biệt bối cảnh sống
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.99 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            ref={containerRef}
+            className="relative h-[400px] w-full rounded-2xl overflow-hidden border border-white/5 select-none shadow-cinematic-cyan bg-black"
+          >
+            {/* Left view (City) */}
+            <div 
+              className="absolute inset-y-0 left-0 bg-gradient-to-r from-cyan-950/40 via-blue-950/15 to-transparent p-10 flex flex-col justify-end space-y-3 z-0"
+              style={{ width: `${sliderPosition}%` }}
             >
-              <div className="space-y-2">
-                <span className="text-[10px] font-black tracking-widest text-red-500 uppercase block font-sans">
-                  THỬ NGHIỆM ĐỒNG THUẬN GIÁ TRỊ SỐNG
-                </span>
-                <h2 className="text-2xl sm:text-4xl font-heading text-white leading-snug">
-                  {QUIZ_QUESTIONS[quizIdx].question}
-                </h2>
-                <p className="text-xs text-gray-500 font-sans">
-                  Hãy đưa ra lựa chọn thành thật nhất đại diện cho thế giới quan hiện tại của bạn:
+              <div className="max-w-[320px] transition-all">
+                <span className="text-[10px] font-bold text-cyan-400 tracking-widest block uppercase font-sans">LỐI SỐNG THÀNH THỊ</span>
+                <h3 className="text-xl sm:text-2xl font-bold text-white mt-1">Chung cư & Thăng tiến</h3>
+                <p className="text-xs sm:text-sm text-gray-300 leading-relaxed mt-2 font-sans">
+                  Áp lực bởi công việc, kẹt xe, thuê nhà, họ sẽ nghĩ về việc làm sao để thăng tiến, mua chung cư.
                 </p>
               </div>
+            </div>
 
-              <div className="space-y-4 pt-4">
-                {QUIZ_QUESTIONS[quizIdx].options.map((opt, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => handleSelectOption(opt.value)}
-                    className="w-full text-left p-5 rounded-xl border border-white/5 bg-white/5 hover:bg-white/10 hover:border-cyan-500/20 transition-all duration-300 text-sm sm:text-base text-gray-300 font-sans cursor-pointer flex items-center justify-between"
-                  >
-                    <span>{opt.text}</span>
-                    <span className="text-cyan-400 font-bold">➔</span>
-                  </button>
-                ))}
-              </div>
-            </motion.div>
-          )}
-
-          {/* TRANG SHAKE TRUNG GIAN (STAGE 6) */}
-          {currentPage === 6 && (
-            <motion.div
-              key="shake-cinematic"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              className="space-y-8 w-full max-w-xl text-center"
+            {/* Right view (Country) */}
+            <div 
+              className="absolute inset-y-0 right-0 bg-gradient-to-l from-amber-950/30 via-stone-900/15 to-transparent p-10 flex flex-col justify-end items-end text-right space-y-3 z-0"
+              style={{ width: `${100 - sliderPosition}%` }}
             >
+              <div className="max-w-[320px] transition-all">
+                <span className="text-[10px] font-bold text-amber-400 tracking-widest block uppercase font-sans">LỐI SỐNG NÔNG THÔN</span>
+                <h3 className="text-xl sm:text-2xl font-bold text-white mt-1">Ổn định & Tình làng nghĩa xóm</h3>
+                <p className="text-xs sm:text-sm text-gray-300 leading-relaxed mt-2 font-sans">
+                  Lo lắng về thời tiết, mùa màng, giá phân bón, họ hướng đến sự ổn định, tình làng nghĩa xóm.
+                </p>
+              </div>
+            </div>
+
+            {/* Handle bar */}
+            <div 
+              className="absolute inset-y-0 w-1 bg-white/10 cursor-ew-resize flex items-center justify-center z-10"
+              style={{ left: `${sliderPosition}%` }}
+              onMouseDown={() => setIsDraggingSlider(true)}
+              onTouchStart={() => setIsDraggingSlider(true)}
+            >
+              <div className="w-10 h-10 rounded-full bg-white text-black font-bold flex items-center justify-center shadow-2xl hover:scale-110 transition-transform">
+                <ArrowLeftRight size={16} />
+              </div>
+            </div>
+          </motion.div>
+        </section>
+
+        {/* SLIDE 3: Karl Marx quote */}
+        <section className="min-h-screen w-full max-w-4xl mx-auto flex flex-col justify-center items-center px-6 py-24 text-center space-y-8 relative">
+          
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
+            className="space-y-6"
+          >
+            <Quote size={40} className="text-red-500/80 mx-auto" />
+            <h1 className="font-heading text-4xl sm:text-6xl lg:text-7xl text-white font-black leading-tight max-w-3xl text-glow-red">
+              "Không phải ý thức quyết định đời sống mà chính <span className="text-red-500">đời sống quyết định ý thức</span>."
+            </h1>
+            <div className="w-20 h-[3px] bg-gradient-to-r from-red-600 to-red-400 mx-auto rounded-full my-6" />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="flex items-center gap-4 bg-white/5 border border-white/5 px-6 py-4 rounded-2xl backdrop-blur-md"
+          >
+            <div className="w-12 h-12 rounded-full bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-400 font-serif font-bold text-lg shadow-lg">
+              ★
+            </div>
+            <div className="text-left">
+              <p className="text-sm font-bold text-white uppercase tracking-wider font-sans">Karl Marx</p>
+              <p className="text-xs text-gray-400 font-sans">Duy vật lịch sử</p>
+            </div>
+          </motion.div>
+        </section>
+
+        {/* SLIDE 4: Khái niệm "Tồn tại xã hội" */}
+        <section className="min-h-screen w-full max-w-5xl mx-auto flex flex-col justify-center px-6 py-24 space-y-12 relative">
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-left space-y-4"
+          >
+            <div className="flex items-center gap-3">
+              <div className="h-[1px] w-8 bg-red-500" />
+              <span className="text-xs tracking-[0.3em] text-red-500 font-bold uppercase block">
+                TỒN TẠI XÃ HỘI (SOCIAL EXISTENCE)
+              </span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-heading text-white">Khái niệm "Tồn tại xã hội"</h2>
+            <p className="text-sm sm:text-base text-gray-400 max-w-3xl font-sans leading-relaxed">
+              Biểu thị sinh hoạt vật chất và các điều kiện sinh hoạt vật chất của xã hội. Di chuột hoặc chạm để xem chi tiết 3 chân kiềng:
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {pillars.map((pillar, idx) => (
               <motion.div
-                animate={isShaking ? {
-                  x: [0, -15, 15, -15, 15, 0],
-                  y: [0, 8, -8, 8, -8, 0]
-                } : { y: [0, -8, 0] }}
-                transition={isShaking ? { duration: 0.8, repeat: Infinity } : { duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="w-20 h-20 rounded-full bg-cyan-500/5 border border-cyan-500/20 flex items-center justify-center mx-auto text-3xl text-cyan-400 shadow-cinematic-cyan"
+                key={idx}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: idx * 0.15 }}
+                onClick={() => setActivePillar(idx)}
+                className={`p-8 rounded-2xl border transition-all duration-300 cursor-pointer backdrop-blur-sm flex flex-col justify-between min-h-[220px] group ${
+                  activePillar === idx 
+                  ? "border-red-500/50 bg-red-500/10 shadow-lg shadow-red-500/5 scale-[1.03]" 
+                  : "border-white/5 bg-white/5 hover:border-white/10 hover:bg-white/10"
+                }`}
               >
-                <Smartphone size={32} className={isShaking ? "animate-bounce" : ""} />
+                <div className="space-y-6">
+                  <div className="flex justify-between items-center">
+                    <span className="text-3xl">{pillar.icon}</span>
+                    <span className={`text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 rounded ${
+                      activePillar === idx ? "bg-red-500/20 text-red-400" : "bg-white/5 text-gray-500"
+                    }`}>
+                      Chân kiềng {idx + 1}
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-lg text-white group-hover:text-red-400 transition-colors">{pillar.title}</h3>
+                    <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mt-1">{pillar.subtitle}</p>
+                  </div>
+                </div>
               </motion.div>
+            ))}
+          </div>
 
-              <h2 className="font-heading text-2xl sm:text-3xl text-white leading-snug">
-                KÍCH HOẠT BIỆN CHỨNG QUY LUẬT
-              </h2>
-              
-              <div className="space-y-2 text-sm text-gray-400 max-w-md mx-auto leading-relaxed font-sans">
-                <p>
-                  {isShaking 
-                    ? "Đang phân tích các dữ liệu sinh tồn..." 
-                    : "Hãy lắc nhẹ thiết bị của bạn hoặc dùng nút giả lập bên dưới để kích hoạt quá trình định hình ý thức."
-                  }
-                </p>
-              </div>
+          {/* <motion.div 
+            key={activePillar}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="p-8 rounded-2xl bg-gradient-to-r from-neutral-950 to-neutral-900 border border-white/5 backdrop-blur-md text-left"
+          >
+            <span className="text-[10px] font-bold text-red-400 uppercase tracking-widest block mb-2 font-sans">Chi tiết nội dung:</span>
+            <p className="text-sm sm:text-base text-gray-300 leading-relaxed font-sans">
+              {pillars[activePillar].desc}
+            </p>
+          </motion.div> */}
+        </section>
 
-              <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
-                <button
-                  onClick={triggerShakeAction}
-                  disabled={isShaking}
-                  className="px-8 py-4 bg-gradient-to-r from-cyan-600 via-cyan-500 to-blue-600 text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all cursor-pointer font-sans shadow-lg shadow-cyan-500/10"
-                >
-                  {isShaking ? "Đang xử lý..." : "Kích hoạt định hình ➔"}
-                </button>
-              </div>
-            </motion.div>
-          )}
+        {/* SLIDE 5: Khái niệm "Ý thức xã hội" */}
+        <section className="min-h-screen w-full max-w-5xl mx-auto flex flex-col justify-center px-6 py-24 space-y-12 relative">
 
-          {/* TRANG KẾT QUẢ VỚI RADAR CHART / SPECTUMS VÀ AI ANALYSIS (STAGE 7) */}
-          {currentPage === 7 && result && (
-            <motion.div
-              key="result-cinematic"
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-              className="space-y-12 w-full max-w-3xl text-center flex flex-col items-center justify-center py-8"
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-left space-y-4"
+          >
+            <div className="flex items-center gap-3">
+              <div className="h-[1px] w-8 bg-cyan-400" />
+              <span className="text-xs tracking-[0.3em] text-cyan-400 font-bold uppercase block">
+                Ý THỨC XÃ HỘI (SOCIAL CONSCIOUSNESS)
+              </span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-heading text-white">Khái niệm "Ý thức xã hội"</h2>
+            <p className="text-sm sm:text-base text-gray-400 max-w-3xl font-sans leading-relaxed">
+              Biểu thị sinh hoạt tinh thần của xã hội, nảy sinh và phản ánh lại tồn tại xã hội. Cấu trúc tinh thần gồm:
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Tam ly xa hoi */}
+            <motion.div 
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="p-8 rounded-2xl bg-gradient-to-br from-neutral-950 to-neutral-900 border border-cyan-500/10 hover:border-cyan-500/30 transition-all duration-500 flex flex-col justify-between"
             >
               <div className="space-y-4">
-                <span className="text-[10px] font-bold text-cyan-400/75 uppercase tracking-[0.25em] block font-sans">
-                  ĐỊNH VỊ NHẬN THỨC BẢN THÂN
-                </span>
-                <h2 className="font-heading text-4xl sm:text-6xl text-white tracking-wide text-glow-blue leading-none">
-                  {result.title}
-                </h2>
-              </div>
-              
-              {/* 1. HỘP HIỂN THỊ PHỔ QUÁT TƯ TƯỞNG (IDEOLOGY SPECTRUM DYNAMIC BAR) */}
-              <div className="w-full max-w-md space-y-2.5 font-sans">
-                <div className="flex justify-between text-[10px] text-gray-500 font-bold uppercase tracking-wider">
-                  <span>Vật chất ({result.spectrum.material}%)</span>
-                  <span>Tinh thần ({result.spectrum.spiritual}%)</span>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-lg">
+                    🧠
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-xl text-white">Tâm lý xã hội</h3>
+                    <span className="text-[10px] text-cyan-400 font-bold uppercase tracking-wider font-sans">Tầng nổi / Dễ thay đổi</span>
+                  </div>
                 </div>
-                <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden flex">
-                  <div className="bg-red-500/80 h-full transition-all duration-1000" style={{ width: `${result.spectrum.material}%` }} />
-                  <div className="bg-cyan-500/80 h-full transition-all duration-1000" style={{ width: `${result.spectrum.spiritual}%` }} />
-                </div>
-              </div>
-
-              <p className="text-gray-400 text-sm sm:text-base leading-relaxed max-w-xl font-quote italic">
-                "{result.desc}"
-              </p>
-
-              <div className="max-w-2xl border-l-2 border-cyan-500/30 pl-6 text-left my-4">
-                <span className="text-[10px] font-bold text-cyan-400/80 uppercase tracking-widest block mb-2 font-sans">
-                  Biện chứng duy vật lịch sử
-                </span>
-                <p className="text-sm sm:text-base text-gray-300 italic leading-relaxed font-quote">
-                  "{result.marx}"
+                <p className="text-sm text-gray-300 leading-relaxed font-sans">
+                  Tình cảm, tâm trạng, thói quen hàng ngày (bề nổi, dễ thay đổi).
                 </p>
               </div>
-              <div className="pt-6">
-                <button
-                  onClick={handleReset}
-                  className="px-8 py-3.5 bg-white/5 hover:bg-white/10 text-white rounded-full border border-white/10 text-xs font-bold uppercase tracking-widest transition-all font-sans cursor-pointer hover:border-cyan-500/30 shadow-lg shadow-black/40"
-                >
-                  Trải nghiệm lại từ đầu ↺
-                </button>
-              </div>
+            </motion.div>
 
-              {/* Sub-references / Mini footer section */}
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 pt-12 border-t border-white/5 w-full max-w-md text-[10px] text-gray-600 font-sans">
-                <a
-                  href="https://vi.wikipedia.org/wiki/Ch%E1%BB%A7_ngh%C4%A9a_duy_v%E1%BA%ADt_l%E1%BB%8Bch_s%E1%BB%AD"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 hover:text-cyan-400/80 transition-colors"
-                >
-                  <span>ⓘ Nguồn tham khảo Wikipedia</span>
-                  <ArrowUpRight size={10} />
-                </a>
-                <span className="hidden sm:inline text-white/5">|</span>
-                <div className="flex items-center gap-1 opacity-70">
-                  <span>⚡ Phát triển với sự hỗ trợ từ Antigravity AI</span>
+            {/* He tu tuong */}
+            <motion.div 
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="p-8 rounded-2xl bg-gradient-to-br from-neutral-950 to-neutral-900 border border-purple-500/10 hover:border-purple-500/30 transition-all duration-500 flex flex-col justify-between"
+            >
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-lg">
+                    ⚖️
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-xl text-white">Hệ tư tưởng</h3>
+                    <span className="text-[10px] text-purple-400 font-bold uppercase tracking-wider font-sans">Bề sâu / Có hệ thống</span>
+                  </div>
                 </div>
+                <p className="text-sm text-gray-300 leading-relaxed font-sans">
+                  Đường lối chính trị, pháp luật, đạo đức, tôn giáo (bề sâu, có hệ thống).
+                </p>
               </div>
             </motion.div>
-          )}
+          </div>
+        </section>
 
-        </AnimatePresence>
+        {/* SLIDE 6: Sơ đồ logic mối quan hệ quyết định */}
+        <section className="min-h-screen w-full max-w-5xl mx-auto flex flex-col justify-center px-6 py-24 space-y-12 relative">
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-left space-y-4"
+          >
+            <div className="flex items-center gap-3">
+              <div className="h-[1px] w-8 bg-red-500" />
+              <span className="text-xs tracking-[0.3em] text-red-500 font-bold uppercase block">
+                SƠ ĐỒ BIỆN CHỨNG CHUYỂN DỊCH
+              </span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-heading text-white">Sơ đồ logic mối quan hệ quyết định</h2>
+            <p className="text-sm sm:text-base text-gray-400 max-w-3xl font-sans leading-relaxed">
+              Nhấp vào từng bước để theo dõi dòng chuyển đổi biện chứng:
+            </p>
+          </motion.div>
+
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 relative py-6">
+            <div className="absolute top-1/2 left-0 right-0 h-[2px] bg-gradient-to-r from-red-500/20 to-cyan-500/20 -translate-y-1/2 hidden md:block z-0" />
+
+            {logicSteps.map((step, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                onClick={() => setActiveLogicStep(idx)}
+                className={`relative z-10 p-6 rounded-2xl border flex md:flex-col items-center gap-4 md:gap-3 cursor-pointer transition-all duration-300 w-full md:w-[18%] ${
+                  activeLogicStep === idx
+                  ? "border-red-500/50 bg-red-950/30 text-white shadow-xl scale-105"
+                  : "border-white/5 bg-white/5 hover:border-white/10 hover:bg-white/10 text-gray-400"
+                }`}
+              >
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
+                  activeLogicStep === idx ? "bg-red-600 text-white shadow-md" : "bg-white/5 text-gray-400"
+                }`}>
+                  {step.icon}
+                </div>
+                <h4 className="font-bold text-xs uppercase tracking-widest font-sans text-center">{step.title}</h4>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div 
+            key={activeLogicStep}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="p-8 rounded-2xl bg-gradient-to-r from-neutral-950 to-neutral-900 border border-white/5 text-left min-h-[110px]"
+          >
+            <span className="text-[10px] font-bold text-red-400 uppercase tracking-widest block mb-2 font-sans">Chi tiết chuyển dịch:</span>
+            <p className="text-sm sm:text-base text-gray-300 leading-relaxed font-sans">
+              {logicSteps[activeLogicStep].desc}
+            </p>
+          </motion.div>
+        </section>
+
+        {/* SLIDE 7: Ví dụ 1 */}
+        <section className="min-h-screen w-full max-w-5xl mx-auto flex flex-col justify-center px-6 py-24 space-y-12 relative">
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-left space-y-4"
+          >
+            <div className="flex items-center gap-3">
+              <div className="h-[1px] w-8 bg-cyan-400" />
+              <span className="text-xs tracking-[0.3em] text-cyan-400 font-bold uppercase block">
+                VÍ DỤ THỰC TIỄN 1
+              </span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-heading text-white">Mạng xã hội và sự thay đổi nhận thức giới trẻ</h2>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="p-8 rounded-2xl bg-gradient-to-br from-neutral-900 to-black border border-white/5 hover:border-red-500/20 transition-all duration-500 space-y-4"
+            >
+              <span className="text-xs font-bold text-red-400 tracking-wider block font-sans">🛠️ TỒN TẠI XÃ HỘI THAY ĐỔI</span>
+              <p className="text-sm text-gray-300 leading-relaxed font-sans">
+                Cơ sở hạ tầng internet phát triển vượt bậc, smartphone trở thành vật bất ly thân, các nền tảng thuật toán video ngắn (TikTok, Reels) bùng nổ. Con người chuyển từ giao tiếp trực tiếp sang tương tác số.
+              </p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="p-8 rounded-2xl bg-gradient-to-br from-neutral-900 to-black border border-white/5 hover:border-cyan-500/20 transition-all duration-500 space-y-4"
+            >
+              <span className="text-xs font-bold text-cyan-400 tracking-wider block font-sans">🧠 Ý THỨC XÃ HỘI THAY ĐỔI CHI PHỐI</span>
+              <p className="text-sm text-gray-300 leading-relaxed font-sans">
+                Giới trẻ hình thành tư duy "nhanh và ngắn", tiếp thu kiến thức dạng mì ăn liền. Xuất hiện các hội chứng tâm lý mới như FOMO (sợ bỏ lỡ), áp lực đồng lứa (peer pressure) khi chứng kiến sự hào nhoáng trên mạng, và định nghĩa mới về người nổi tiếng (KOLs/KOCs).
+              </p>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* SLIDE 8: Ví dụ 4 */}
+        <section className="min-h-screen w-full max-w-5xl mx-auto flex flex-col justify-center px-6 py-24 space-y-12 relative mb-16">
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-left space-y-4"
+          >
+            <div className="flex items-center gap-3">
+              <div className="h-[1px] w-8 bg-cyan-400" />
+              <span className="text-xs tracking-[0.3em] text-cyan-400 font-bold uppercase block">
+                VÍ DỤ THỰC TIỄN 2
+              </span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-heading text-white">Chuyển đổi số và Trí tuệ nhân tạo (AI)</h2>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="p-8 rounded-2xl bg-gradient-to-br from-neutral-900 to-black border border-white/5 hover:border-red-500/20 transition-all duration-500 space-y-4"
+            >
+              <span className="text-xs font-bold text-red-400 tracking-wider block font-sans">🛠️ TỒN TẠI XÃ HỘI THAY ĐỔI</span>
+              <p className="text-sm text-gray-300 leading-relaxed font-sans">
+                Sự xuất hiện của AI tạo sinh, ChatGPT, các hệ thống tự động hóa thay thế lao động thủ công và một phần lao động trí óc trong các nhà máy, văn phòng.
+              </p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="p-8 rounded-2xl bg-gradient-to-br from-neutral-900 to-black border border-white/5 hover:border-cyan-500/20 transition-all duration-500 space-y-4"
+            >
+              <span className="text-xs font-bold text-cyan-400 tracking-wider block font-sans">🧠 Ý THỨC XÃ HỘI THAY ĐỔI CHI PHỐI</span>
+              <p className="text-sm text-gray-300 leading-relaxed font-sans">
+                Khái niệm về "năng lực cạnh tranh" của con người thay đổi. Thay vì học thuộc lòng, xã hội đề cao tư duy phản biện và kỹ năng ra lệnh cho AI (Prompt Engineering). Xuất hiện tâm lý lo âu bị thay thế (AI anxiety) và các cuộc thảo luận đạo đức về bản quyền của AI.
+              </p>
+            </motion.div>
+          </div>
+        </section>
+
       </div>
 
-      {/* 3. ĐIỀU HƯỚNG TRANG DƯỚI CHÂN TRANG */}
-      <div className="w-full flex items-center justify-between text-[10px] sm:text-xs tracking-widest text-gray-500 font-sans font-bold uppercase relative z-10 p-5 sm:p-6 border-t border-white/5 bg-black/40 backdrop-blur-sm">
-        {currentPage > 0 && currentPage < 5 ? (
-          <button 
-            onClick={prevStory}
-            className="hover:text-white transition-colors cursor-pointer"
-          >
-            <span className="hidden sm:inline">← BƯỚC TRƯỚC</span>
-            <span className="sm:hidden">← LÙI LẠI</span>
-          </button>
-        ) : <div />}
-
-        <div>
-          {currentPage <= 4 ? `${currentPage + 1} / ${STORY_PAGES.length}` : ""}
-        </div>
-
-        {currentPage < 4 ? (
-          <button 
-            onClick={nextStory}
-            className="hover:text-white transition-colors cursor-pointer"
-          >
-            <span className="hidden sm:inline">TIẾP THEO →</span>
-            <span className="sm:hidden">TIẾP →</span>
-          </button>
-        ) : currentPage === 4 ? (
-          <button 
-            onClick={() => setCurrentPage(5)}
-            className="text-cyan-400 hover:text-white transition-colors animate-pulse cursor-pointer"
-          >
-            <span className="hidden sm:inline">BẮT ĐẦU ĐỒNG THUẬN ➔</span>
-            <span className="sm:hidden">ĐỒNG THUẬN ➔</span>
-          </button>
-        ) : <div />}
-      </div>
-
+      {/* Simplified, neat artistic footer */}
+      <footer className="w-full text-center py-8 border-t border-white/5 bg-black/60 backdrop-blur-md relative z-10 text-[10px] text-gray-600 font-sans tracking-widest">
+        <span>★ BIỆN CHỨNG DUY VẬT LỊCH SỬ — THUYẾT TRÌNH TƯƠNG TÁC CAO CẤP ★</span>
+      </footer>
     </div>
   );
 }
