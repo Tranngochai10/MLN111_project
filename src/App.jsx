@@ -22,10 +22,20 @@ const IMAGES = {
   factory: 'https://images.unsplash.com/photo-1565793298595-6a879b1d9492?w=1200&q=80&auto=format&fit=crop',
   agriculture: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1200&q=80&auto=format&fit=crop',
   community: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=1200&q=80&auto=format&fit=crop',
+  elderlySaver: '/assets/accumulation-pattern.png',
+  youngShopper: '/assets/digital-consumption-pattern.png',
   smartphone: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1200&q=80&auto=format&fit=crop',
   tiktok: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d?w=1200&q=80&auto=format&fit=crop',
   ai: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80&auto=format&fit=crop',
+  // AI step images
+  aiBrain: 'https://images.unsplash.com/photo-1676573704285-d38fdb797461?w=800&q=80&auto=format&fit=crop',
+  aiStudent: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80&auto=format&fit=crop',
+  aiBusiness: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80&auto=format&fit=crop',
+  aiEngineer: 'https://images.unsplash.com/photo-1629904853893-c2c8981a1dc5?w=800&q=80&auto=format&fit=crop',
+  aiWorkplace: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80&auto=format&fit=crop',
+  aiSociety: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&q=80&auto=format&fit=crop',
 };
+
 
 // ─── Shared Animation Variants ─────────────────────────────────────────────
 const fadeUp = {
@@ -118,7 +128,7 @@ function HeroSection() {
         >
           Tồn tại xã hội
           <br />
-          <span className="text-gold">quyết định</span> ý thức xã hội
+            <span className="text-gold">quyết định</span> ý thức xã hội
         </motion.h1>
 
         <motion.p
@@ -158,8 +168,8 @@ function HeroSection() {
           transition={{ delay: 1.4 }}
           className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/50 hover:text-white/80 transition-colors cursor-pointer"
         >
-          <span className="text-xs font-medium tracking-widest uppercase">Cuộn xuống</span>
-          <motion.div animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}>
+            <span className="text-xs font-medium tracking-widest uppercase">Cuộn xuống</span>
+            <motion.div animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}>
             <ChevronDown size={20} />
           </motion.div>
         </motion.button>
@@ -194,7 +204,7 @@ function OpeningQuestion() {
 
         <div className="grid md:grid-cols-2 gap-8">
           {/* Urban */}
-          <motion.div
+            <motion.div
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-60px' }}
@@ -226,7 +236,7 @@ function OpeningQuestion() {
           </motion.div>
 
           {/* Rural */}
-          <motion.div
+            <motion.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-60px' }}
@@ -305,10 +315,10 @@ function MarxQuote() {
           transition={{ duration: 0.6, delay: 1.8 }}
           className="inline-flex items-center gap-4 bg-white/5 border border-white/10 px-7 py-4 rounded-2xl backdrop-blur-sm"
         >
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-gold">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-gold">
             <Star size={18} className="text-gold fill-gold" />
           </div>
-          <div className="text-left">
+            <div className="text-left">
             <p className="text-sm font-bold text-white uppercase tracking-wider">Karl Marx</p>
             <p className="text-sm text-white/40">Duy vật biện chứng lịch sử</p>
           </div>
@@ -371,7 +381,7 @@ function SocialExistence() {
           >
             Tồn tại xã hội
           </motion.h2>
-          <motion.p
+            <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -450,6 +460,439 @@ function SocialExistence() {
 }
 
 // ══════════════════════════════════════════════════════════════════════════
+// SECTION 4B: CONDITIONED THOUGHT EXPERIMENT
+// ══════════════════════════════════════════════════════════════════════════
+
+// Pattern card modal data
+const PATTERN_DATA = {
+  saving: {
+    key: 'saving',
+    label: 'Mẫu hình tích lũy',
+    tagline: 'An toàn trước, tiêu dùng sau',
+    icon: ShieldCheck,
+    accentColor: '#b45309', // amber-700
+    accentBg: 'from-amber-900/80 via-stone-900/70 to-stone-950/90',
+    pillBg: 'bg-amber-900/30',
+    pillBorder: 'border-amber-400/30',
+    pillText: 'text-amber-200',
+    badgeIcon: ShieldCheck,
+    image: null, // set at runtime via IMAGES
+    desc: 'Hình ảnh gợi liên tưởng đến thế hệ coi tiết kiệm là nền tảng của ổn định: ưu tiên sổ tiết kiệm, khoản dự phòng và kế hoạch lâu dài.',
+    details: [
+      {
+        icon: TrendingUp,
+        label: 'Hoàn cảnh vật chất',
+        text: 'Thu nhập phải chắt chiu, kinh nghiệm thiếu thốn khiến việc dự phòng trở thành phản xạ sống còn.',
+        color: 'text-amber-700',
+        bg: 'bg-amber-50',
+        border: 'border-amber-200',
+      },
+      {
+        icon: ShieldCheck,
+        label: 'Ý thức dễ hình thành',
+        text: 'Đề cao bền vững, sợ rủi ro, xem tiết kiệm là đạo đức và trách nhiệm gia đình.',
+        color: 'text-stone-700',
+        bg: 'bg-stone-50',
+        border: 'border-stone-200',
+      },
+    ],
+    tags: ['Tiết kiệm', 'Bền vững', 'An toàn', 'Dự phòng', 'Dài hạn'],
+  },
+  digital: {
+    key: 'digital',
+    label: 'Mẫu hình tiêu dùng số',
+    tagline: 'Trải nghiệm ngay, quyết định nhanh',
+    icon: Smartphone,
+    accentColor: '#cc1717',
+    accentBg: 'from-primary/80 via-primary/60 to-stone-950/80',
+    pillBg: 'bg-primary/30',
+    pillBorder: 'border-red-300/30',
+    pillText: 'text-red-200',
+    badgeIcon: Smartphone,
+    image: null,
+    desc: 'Hình ảnh gợi đến thế hệ lớn lên cùng thương mại điện tử, mạng xã hội và nhịp sống số: tiêu dùng gắn với cảm xúc, tốc độ và nhận diện cá nhân.',
+    details: [
+      {
+        icon: Zap,
+        label: 'Môi trường sống',
+        text: 'Thuật toán, flash sale, KOL và nhịp mua sắm liên tục khiến lựa chọn tiêu dùng trở nên tức thời.',
+        color: 'text-primary',
+        bg: 'bg-primary/5',
+        border: 'border-primary/15',
+      },
+      {
+        icon: Sparkles,
+        label: 'Ý thức dễ hình thành',
+        text: 'Đề cao trải nghiệm cá nhân, sự tiện lợi, tính cập nhật và cảm giác "không bỏ lỡ cơ hội".',
+        color: 'text-stone-600',
+        bg: 'bg-stone-50',
+        border: 'border-stone-200',
+      },
+    ],
+    tags: ['Tức thời', 'Flash Sale', 'YOLO', 'KOL', 'Trải nghiệm'],
+  },
+};
+
+function PatternModal({ patternKey, onClose }) {
+  const data = PATTERN_DATA[patternKey];
+  if (!data) return null;
+  const IconComp = data.icon;
+  return (
+    <AnimatePresence>
+      <motion.div
+        key="modal-backdrop"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.22 }}
+        className="fixed inset-0 z-[9999] flex items-end justify-center sm:items-center"
+        onClick={onClose}
+        style={{ background: 'rgba(10,10,15,0.72)', backdropFilter: 'blur(12px)' }}
+      >
+        <motion.div
+          key="modal-card"
+          initial={{ opacity: 0, y: 60, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 40, scale: 0.97 }}
+          transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
+          onClick={(e) => e.stopPropagation()}
+          className="relative w-full max-w-lg mx-4 mb-4 sm:mb-0 rounded-[2rem] overflow-hidden shadow-[0_40px_120px_rgba(0,0,0,0.5)]"
+          style={{ maxHeight: '90vh' }}
+        >
+          {/* Hero image area */}
+          <div className="relative h-56 sm:h-64 overflow-hidden">
+            <img
+              src={patternKey === 'saving' ? IMAGES.elderlySaver : IMAGES.youngShopper}
+              alt={data.label}
+              className="w-full h-full object-cover"
+            />
+            <div className={`absolute inset-0 bg-gradient-to-t ${data.accentBg}`} />
+
+            {/* Close button */}
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 border border-white/20 flex items-center justify-center text-white hover:bg-black/60 transition-colors backdrop-blur-sm"
+              aria-label="Đóng"
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M4 4L12 12M12 4L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
+
+            {/* Badge */}
+            <div className="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/35 px-3.5 py-1.5 backdrop-blur-md">
+              <IconComp size={14} className="text-white" />
+              <span className="text-xs font-bold uppercase tracking-[0.18em] text-white">{data.label}</span>
+            </div>
+
+            {/* Bottom label */}
+            <div className="absolute bottom-0 left-0 right-0 p-6">
+              <h3 className="font-heading text-2xl sm:text-3xl font-bold text-white leading-tight">{data.tagline}</h3>
+            </div>
+          </div>
+
+          {/* Content area */}
+          <div className="bg-white px-6 pb-6 pt-5 overflow-y-auto" style={{ maxHeight: '55vh' }}>
+            <p className="text-sm leading-7 text-stone-600 mb-5">{data.desc}</p>
+
+            {/* Tags */}
+            <div className="flex flex-wrap gap-2 mb-5">
+              {data.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="px-3 py-1 rounded-full text-xs font-semibold border"
+                  style={{ borderColor: data.accentColor + '33', color: data.accentColor, background: data.accentColor + '12' }}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            {/* Detail cards */}
+            <div className="grid gap-3">
+              {data.details.map((item, i) => {
+                const DIcon = item.icon;
+                return (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 + i * 0.07, duration: 0.3 }}
+                    className={`flex items-start gap-3 rounded-xl border ${item.border} ${item.bg} p-4`}
+                  >
+                    <div className={`mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg border ${item.border} bg-white ${item.color}`}>
+                      <DIcon size={14} />
+                    </div>
+                    <div>
+                      <p className={`mb-1 text-xs font-bold uppercase tracking-[0.15em] ${item.color} opacity-80`}>{item.label}</p>
+                      <p className="text-sm leading-relaxed text-stone-700">{item.text}</p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            {/* Marx note */}
+            <div className="mt-5 rounded-xl border border-stone-200 bg-stone-50 p-4 flex items-start gap-3">
+              <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-stone-200 text-stone-500">
+                <Quote size={13} />
+              </div>
+              <p className="text-xs leading-6 text-stone-500 italic">
+                Tồn tại xã hội quyết định ý thức xã hội — hoàn cảnh vật chất {patternKey === 'saving' ? '"lập trình"' : '"định hướng"'} cách người này suy nghĩ và lựa chọn.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+function ConditionedThoughtSection() {
+  const [activeModal, setActiveModal] = useState(null);
+  const valuePairs = [
+    {
+      label: 'Lối sống tiêu dùng nhanh',
+      left: 'Tích lũy, ưu tiên an toàn dài hạn',
+      right: 'Mua sắm tức thời, trải nghiệm ngắn hạn',
+      icon: ShieldCheck,
+    },
+    {
+      label: 'Hình mẫu thành công',
+      left: 'Ổn định tài chính, có khoản dự phòng',
+      right: 'Bắt trend, thể hiện bản thân trên nền tảng số',
+      icon: TrendingUp,
+    },
+    {
+      label: 'Khẩu hiệu sống',
+      left: '"Tích cốc phòng cơ"',
+      right: '"Bạn chỉ sống một lần" (YOLO)',
+      icon: MessageSquare,
+    },
+  ];
+
+  return (
+    <section id="conditioned-thought" className="relative overflow-hidden bg-[linear-gradient(180deg,#f8f5ef_0%,#fff8f4_46%,#fffdfb_100%)] py-36 lg:py-40">
+      <div className="absolute inset-0 dot-grid opacity-25" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/25 to-transparent" />
+      <div className="absolute left-0 top-24 h-72 w-72 rounded-full bg-primary/8 blur-3xl" />
+      <div className="absolute right-0 bottom-16 h-80 w-80 rounded-full bg-gold/10 blur-3xl" />
+
+      {/* Modal */}
+      <AnimatePresence>
+        {activeModal && (
+          <PatternModal patternKey={activeModal} onClose={() => setActiveModal(null)} />
+        )}
+      </AnimatePresence>
+
+      <div className="relative mx-auto max-w-7xl px-6">
+        <div className="mx-auto mb-20 max-w-5xl text-center">
+          <SectionLabel icon={Eye}>Tình huống gợi mở</SectionLabel>
+          <motion.h2
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="font-heading mt-6 mb-6 text-4xl leading-[1.04] text-text-heading sm:text-5xl lg:text-6xl"
+          >
+            BẠN NGHĨ RA SUY NGHĨ CỦA MÌNH,
+            <br />
+            <span className="gradient-text-red">HAY HOÀN CẢNH ĐÃ "LẬP TRÌNH" NÓ?</span>
+          </motion.h2>
+            <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.12, duration: 0.6 }}
+            className="mx-auto max-w-4xl text-lg leading-8 text-text-heading/78 sm:text-xl"
+          >
+            Cùng một cá nhân, nhưng nếu lớn lên trong những điều kiện vật chất và môi trường sống khác nhau, hệ giá trị và cách lựa chọn thường cũng khác nhau. Đây là một minh họa trực quan cho luận điểm: tồn tại xã hội định hình ý thức xã hội.
+          </motion.p>
+        </div>
+
+        {/* ── Two pattern cards + center question ── */}
+        <div className="mb-16 grid items-center gap-8 xl:grid-cols-[1fr_auto_1fr] xl:gap-10">
+
+          {/* CARD 1 — Mẫu hình tích lũy */}
+          <motion.button
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ y: -6, scale: 1.015 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => setActiveModal('saving')}
+            className="group relative overflow-hidden rounded-[2rem] cursor-pointer focus:outline-none text-left"
+            aria-label="Xem phân tích: Mẫu hình tích lũy"
+          >
+            {/* Image */}
+            <div className="relative h-[22rem] sm:h-[26rem] overflow-hidden rounded-[2rem]">
+              <img
+                src={IMAGES.elderlySaver}
+                alt="Người lớn tuổi đại diện cho lối sống tiết kiệm và tích lũy tài chính"
+                className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-107"
+              />
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-900/25 to-transparent transition-opacity duration-300" />
+              {/* Hover tint */}
+              <div className="absolute inset-0 bg-amber-900/0 group-hover:bg-amber-900/15 transition-colors duration-500" />
+
+              {/* Top badge */}
+              <div className="absolute left-5 top-5 inline-flex items-center gap-2 rounded-full border border-white/40 bg-black/32 px-4 py-2 text-sm font-bold uppercase tracking-[0.18em] text-white shadow-lg backdrop-blur-md">
+                <ShieldCheck size={15} className="text-amber-300" />
+                <span>Mẫu hình tích lũy</span>
+              </div>
+
+              {/* Bottom info */}
+              <div className="absolute bottom-0 left-0 right-0 p-6">
+                <h3 className="font-heading text-xl sm:text-2xl font-bold text-white mb-2 leading-tight">An toàn trước, tiêu dùng sau</h3>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {['Tiết kiệm', 'Dài hạn', 'An toàn'].map(t => (
+                    <span key={t} className="px-2.5 py-1 rounded-full bg-amber-400/20 border border-amber-300/30 text-amber-200 text-xs font-semibold">{t}</span>
+                  ))}
+                </div>
+                {/* Tap CTA */}
+                <motion.div
+                  className="inline-flex items-center gap-2 rounded-full bg-white/15 border border-white/25 px-4 py-2 backdrop-blur-sm group-hover:bg-white/25 transition-colors duration-300"
+                >
+                  <span className="text-sm font-semibold text-white">Click để xem phân tích</span>
+                  <ArrowRight size={14} className="text-white/80 group-hover:translate-x-1 transition-transform duration-300" />
+                </motion.div>
+              </div>
+
+              {/* Shimmer on hover */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                style={{ background: 'linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.06) 50%, transparent 60%)' }}
+              />
+            </div>
+          </motion.button>
+
+          {/* Center — Question */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.88 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55, delay: 0.12 }}
+            className="flex items-center justify-center gap-4 xl:flex-col"
+            aria-hidden="true"
+          >
+            <div className="relative flex h-28 w-28 items-center justify-center rounded-full border-4 border-primary/15 bg-white shadow-[0_18px_40px_rgba(204,23,23,0.12)]">
+              <span className="font-heading text-7xl leading-none text-primary">?</span>
+              {/* pulse ring */}
+              <span className="absolute inset-0 rounded-full border-2 border-primary/20 animate-ping" style={{ animationDuration: '2.4s' }} />
+            </div>
+            <div className="rounded-2xl border border-primary/10 bg-white/95 px-5 py-4 text-center shadow-[0_10px_25px_rgba(204,23,23,0.08)] backdrop-blur-sm max-w-[180px] xl:max-w-[200px]">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary mb-1">Cùng câu hỏi</p>
+              <p className="text-sm leading-6 text-text-heading/75 font-medium">Nên sống để dành hay sống để tận hưởng?</p>
+            </div>
+          </motion.div>
+
+          {/* CARD 2 — Mẫu hình tiêu dùng số */}
+          <motion.button
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.65, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ y: -6, scale: 1.015 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => setActiveModal('digital')}
+            className="group relative overflow-hidden rounded-[2rem] cursor-pointer focus:outline-none text-left"
+            aria-label="Xem phân tích: Mẫu hình tiêu dùng số"
+          >
+            <div className="relative h-[22rem] sm:h-[26rem] overflow-hidden rounded-[2rem]">
+              <img
+                src={IMAGES.youngShopper}
+                alt="Người trẻ gắn với tiêu dùng số, điện thoại và văn hóa mua sắm trực tuyến"
+                className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-107"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-primary/75 via-primary/25 to-transparent transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-500" />
+
+              {/* Top badge */}
+              <div className="absolute left-5 top-5 inline-flex items-center gap-2 rounded-full border border-white/40 bg-black/32 px-4 py-2 text-sm font-bold uppercase tracking-[0.18em] text-white shadow-lg backdrop-blur-md">
+                <Smartphone size={15} className="text-red-300" />
+                <span>Mẫu hình tiêu dùng số</span>
+              </div>
+
+              {/* Bottom info */}
+              <div className="absolute bottom-0 left-0 right-0 p-6">
+                <h3 className="font-heading text-xl sm:text-2xl font-bold text-white mb-2 leading-tight">Trải nghiệm ngay, quyết định nhanh</h3>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {['Flash Sale', 'YOLO', 'Tức thời'].map(t => (
+                    <span key={t} className="px-2.5 py-1 rounded-full bg-white/15 border border-white/25 text-white/90 text-xs font-semibold">{t}</span>
+                  ))}
+                </div>
+                <motion.div
+                  className="inline-flex items-center gap-2 rounded-full bg-white/15 border border-white/25 px-4 py-2 backdrop-blur-sm group-hover:bg-white/25 transition-colors duration-300"
+                >
+                  <span className="text-sm font-semibold text-white">Click để xem phân tích</span>
+                  <ArrowRight size={14} className="text-white/80 group-hover:translate-x-1 transition-transform duration-300" />
+                </motion.div>
+              </div>
+
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                style={{ background: 'linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.06) 50%, transparent 60%)' }}
+              />
+            </div>
+          </motion.button>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="rounded-[2rem] border border-stone-200/80 bg-white/95 p-7 shadow-[0_20px_70px_rgba(15,23,42,0.06)] md:p-10"
+        >
+            <div className="grid items-start gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+            <div>
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/10 bg-primary/5 px-4 py-2">
+                <Target size={15} className="text-primary" />
+                <span className="text-sm font-bold uppercase tracking-[0.18em] text-primary">Đối chiếu giá trị</span>
+              </div>
+              <h3 className="font-heading mb-4 text-3xl leading-tight text-text-heading sm:text-4xl">Cùng là lựa chọn cá nhân, nhưng được nuôi dưỡng từ những nền sống khác nhau</h3>
+              <p className="text-lg leading-8 text-text-heading/78">
+                Những khẩu hiệu sống không xuất hiện trong khoảng không trung tính. Chúng thường kết tinh từ nhịp sống kinh tế, chuẩn mực thế hệ, áp lực xã hội và hệ sinh thái truyền thông bao quanh mỗi người.
+              </p>
+            </div>
+
+            <div className="space-y-5">
+              {valuePairs.map((item, idx) => {
+                const Icon = item.icon;
+                return (
+                  <motion.div
+                    key={item.label}
+                    initial={{ opacity: 0, y: 18 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    whileHover={{ y: -4 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.45, delay: 0.08 * idx }}
+                    className="rounded-[1.5rem] border border-stone-200 bg-[linear-gradient(180deg,rgba(255,255,255,1),rgba(248,245,239,0.92))] p-5 shadow-[0_12px_30px_rgba(15,23,42,0.04)]"
+                  >
+                    <div className="mb-4 flex items-center gap-3">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-primary/10 bg-primary/10 text-primary">
+                        <Icon size={18} strokeWidth={1.7} />
+                      </div>
+                      <p className="text-base font-bold uppercase tracking-[0.16em] text-text-heading">{item.label}</p>
+                    </div>
+                    <div className="grid items-center gap-3 md:grid-cols-[1fr_auto_1fr]">
+                      <div className="rounded-xl border border-gold/20 bg-gold/10 px-4 py-4 text-base font-medium leading-7 text-text-heading">{item.left}</div>
+                      <div className="text-center text-sm font-bold uppercase tracking-[0.18em] text-text-heading/45">vs</div>
+                      <div className="rounded-xl border border-primary/10 bg-primary/5 px-4 py-4 text-base font-medium leading-7 text-text-heading">{item.right}</div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════════════
 // SECTION 5: SOCIAL CONSCIOUSNESS
 // ══════════════════════════════════════════════════════════════════════════
 function SocialConsciousness() {
@@ -469,7 +912,7 @@ function SocialConsciousness() {
           >
             Ý thức xã hội
           </motion.h2>
-          <motion.p
+            <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -481,7 +924,7 @@ function SocialConsciousness() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          <motion.div
+            <motion.div
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-60px' }}
@@ -512,7 +955,7 @@ function SocialConsciousness() {
             </div>
           </motion.div>
 
-          <motion.div
+            <motion.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-60px' }}
@@ -631,7 +1074,7 @@ function DialecticalRelationship() {
           >
             Mối quan hệ biện chứng
           </motion.h2>
-          <motion.p
+            <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -691,7 +1134,7 @@ function DialecticalRelationship() {
             ))}
           </svg>
 
-          <div className="relative w-full h-full" style={{ overflow: 'visible' }}>
+            <div className="relative w-full h-full" style={{ overflow: 'visible' }}>
             {steps.map((step, idx) => {
               const [xPct, yPct] = nodePositions[idx];
               const Icon = step.icon;
@@ -785,14 +1228,14 @@ function DialecticalRelationship() {
             })}
           </div>
 
-          <motion.div
+            <motion.div
             initial={{ scaleY: 0 }}
             animate={isInView ? { scaleY: 1 } : {}}
             transition={{ duration: 1.5, delay: 1, ease: [0.16, 1, 0.3, 1] }}
             className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-primary/20 via-gold/10 to-primary/20 -translate-x-1/2 hidden md:block origin-top"
           />
 
-          <motion.div
+            <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 2.2 }}
@@ -835,7 +1278,7 @@ function SocialMediaSection() {
             <br />
             <span className="gradient-text-red">sự thay đổi nhận thức</span>
           </motion.h2>
-          <motion.p
+            <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -847,7 +1290,7 @@ function SocialMediaSection() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          <motion.div
+            <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-60px' }}
@@ -873,7 +1316,7 @@ function SocialMediaSection() {
             </div>
           </motion.div>
 
-          <motion.div
+            <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-60px' }}
@@ -905,240 +1348,411 @@ function SocialMediaSection() {
 }
 
 // ══════════════════════════════════════════════════════════════════════════
-// SECTION 8: AI EXAMPLE
+// SECTION 9: SOCIAL CONSCIOUSNESS FEEDBACK EFFECT — REFACTORED
 // ══════════════════════════════════════════════════════════════════════════
-function AISection() {
-  return (
-    <section id="ai-example" className="relative py-36 bg-cream overflow-hidden">
-      <div className="absolute inset-0 dot-grid opacity-30" />
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
-      <div className="relative max-w-6xl mx-auto px-6">
-        <div className="text-center mb-20">
-          <SectionLabel icon={Bot}>Ví dụ thực tiễn</SectionLabel>
-          <motion.h2
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="font-heading text-display-xl text-text-heading mt-6 mb-5"
-          >
-            Chuyển đổi số &{' '}
-            <span className="gradient-text-red">Trí tuệ nhân tạo</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-body-lg text-muted max-w-2xl mx-auto"
-          >
-            Sự xuất hiện của AI đang tạo ra những thay đổi chưa từng có trong cách con người học, làm việc và nhìn nhận bản thân.
-          </motion.p>
-        </div>
+// ── Left column: 4-node flow diagram data ──────────────────────────────────
 
-        <div className="grid md:grid-cols-2 gap-8">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.6 }}
-            className="card p-8"
-          >
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                <Cpu size={24} className="text-primary" strokeWidth={1.5} />
-              </div>
-              <div>
-                <h3 className="font-bold text-text-heading text-lg">Tồn tại xã hội thay đổi</h3>
-                <p className="text-label text-primary uppercase">Lực lượng sản xuất mới</p>
-              </div>
-            </div>
-            <p className="text-sm text-muted leading-relaxed mb-5">
-              AI tạo sinh, ChatGPT, các hệ thống tự động hóa thay thế lao động thủ công và một phần lao động trí óc trong các nhà máy, văn phòng. Hàng triệu việc làm đang bị tái cấu trúc.
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {['ChatGPT', 'Tự động hóa', 'Robot', 'Gig economy'].map(tag => (
-                <span key={tag} className="px-3 py-1 rounded-full bg-primary/8 text-primary text-sm font-semibold">{tag}</span>
-              ))}
-            </div>
-          </motion.div>
+const FLOW_NODES = [
+  {
+    id: 'existence',
+    label: 'Tồn tại xã hội',
+    sub: 'Điều kiện vật chất quyết định',
+    icon: Home,
+    color: '#1D4ED8',      // primary blue
+    bgLight: 'bg-blue-50',
+    border: 'border-blue-200',
+    iconBg: 'bg-blue-600',
+    ring: 'ring-blue-300',
+    dot: 'bg-blue-600',
+  },
+  {
+    id: 'consciousness',
+    label: 'Ý thức xã hội',
+    sub: 'Hình thành từ tồn tại xã hội',
+    icon: Brain,
+    color: '#0EA5E9',      // secondary sky
+    bgLight: 'bg-sky-50',
+    border: 'border-sky-200',
+    iconBg: 'bg-sky-500',
+    ring: 'ring-sky-300',
+    dot: 'bg-sky-500',
+  },
+  {
+    id: 'action',
+    label: 'Hành động thực tiễn',
+    sub: 'Ý thức dẫn dắt hành động',
+    icon: Zap,
+    color: '#F59E0B',      // accent amber
+    bgLight: 'bg-amber-50',
+    border: 'border-amber-200',
+    iconBg: 'bg-amber-500',
+    ring: 'ring-amber-300',
+    dot: 'bg-amber-500',
+  },
+  {
+    id: 'newExistence',
+    label: 'Xã hội thay đổi',
+    sub: 'Tồn tại xã hội mới được tạo ra',
+    icon: Layers,
+    color: '#1D4ED8',
+    bgLight: 'bg-blue-50',
+    border: 'border-blue-200',
+    iconBg: 'bg-blue-700',
+    ring: 'ring-blue-300',
+    dot: 'bg-blue-700',
+  },
+];
 
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="card p-8"
-          >
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-12 h-12 rounded-xl bg-gold/10 flex items-center justify-center">
-                <Sparkles size={24} className="text-gold" strokeWidth={1.5} />
-              </div>
-              <div>
-                <h3 className="font-bold text-text-heading text-lg">Ý thức xã hội thay đổi</h3>
-                <p className="text-label text-gold uppercase">Chi phối nhận thức</p>
-              </div>
-            </div>
-            <p className="text-sm text-muted leading-relaxed mb-5">
-              Khái niệm về "năng lực cạnh tranh" của con người thay đổi. Thay vì học thuộc lòng, xã hội đề cao tư duy phản biện và kỹ năng ra lệnh cho AI. Xuất hiện tâm lý AI anxiety và các cuộc thảo luận đạo đức về bản quyền AI.
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {['Prompt Engineering', 'AI Anxiety', 'Tư duy phản biện', 'Đạo đức AI'].map(tag => (
-                <span key={tag} className="px-3 py-1 rounded-full bg-gold/8 text-gold text-sm font-semibold">{tag}</span>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  );
-}
+// ── Right column: AI step data ─────────────────────────────────────────────
+const AI_STEPS = [
+  {
+    step: 1,
+    label: 'AI xuất hiện',
+    image: null, // resolved via IMAGES.aiBrain
+    imgKey: 'aiBrain',
+    imgAlt: 'AI brain & ChatGPT concept',
+  },
+  {
+    step: 2,
+    label: 'Con người nhận thức được lợi ích của AI',
+    imgKey: 'aiStudent',
+    imgAlt: 'Sinh viên học cùng AI',
+  },
+  {
+    step: 3,
+    label: 'Trường học và doanh nghiệp ứng dụng AI',
+    imgKey: 'aiBusiness',
+    imgAlt: 'Doanh nghiệp ứng dụng AI',
+  },
+  {
+    step: 4,
+    label: 'Xuất hiện kỹ năng và ngành nghề mới',
+    imgKey: 'aiEngineer',
+    imgAlt: 'Prompt Engineer / AI Engineer',
+  },
+  {
+    step: 5,
+    label: 'Thị trường lao động thay đổi',
+    imgKey: 'aiWorkplace',
+    imgAlt: 'Môi trường làm việc mới',
+  },
+  {
+    step: 6,
+    label: 'Xã hội thay đổi',
+    imgKey: 'aiSociety',
+    imgAlt: 'Xã hội số hiện đại',
+  },
+];
 
-// ══════════════════════════════════════════════════════════════════════════
-// SECTION 9: SOCIAL CONSCIOUSNESS FEEDBACK EFFECT
-// ══════════════════════════════════════════════════════════════════════════
 function FeedbackSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-80px' });
 
-  return (
-    <section id="feedback" ref={ref} className="relative py-36 bg-stone-900 overflow-hidden">
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-primary/8 blur-3xl" />
-        <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-gold/5 blur-3xl" />
-      </div>
+  // flow diagram: which node is active (-1 = none)
+  const [activeNode, setActiveNode] = useState(-1);
 
-      <div className="relative max-w-5xl mx-auto px-6">
-        <div className="text-center mb-20">
-          <SectionLabel icon={GitBranch} dark>Tương tác hai chiều</SectionLabel>
+  // AI steps: how many steps are revealed (0 = only step 1 shown)
+  const [revealedSteps, setRevealedSteps] = useState(1);
+  const allRevealed = revealedSteps >= AI_STEPS.length;
+
+  const handleStepClick = () => {
+    if (!allRevealed) setRevealedSteps((s) => s + 1);
+  };
+
+  // sync active node with revealed steps
+  const nodeForStep = Math.min(Math.floor(((revealedSteps - 1) / (AI_STEPS.length - 1)) * (FLOW_NODES.length - 1)), FLOW_NODES.length - 1);
+
+  return (
+    <section
+      id="feedback"
+      ref={ref}
+      className="relative py-24 lg:py-36 overflow-hidden"
+      style={{ background: '#F8FAFC' }}
+    >
+      {/* subtle dot grid */}
+      <div className="absolute inset-0 dot-grid opacity-20 pointer-events-none" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-200 to-transparent" />
+
+      <div className="relative max-w-7xl mx-auto px-6">
+
+        {/* ── Header ── */}
+        <div className="text-center mb-16 lg:mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-blue-200 bg-blue-50 text-blue-700 text-label uppercase font-semibold tracking-widest mb-8"
+          >
+            <GitBranch size={12} strokeWidth={2.5} />
+            <span>Tính độc lập tương đối</span>
+          </motion.div>
+
           <motion.h2
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="font-heading text-display-xl text-white mt-6 mb-5"
+            transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+            className="font-heading text-4xl sm:text-5xl lg:text-6xl leading-[1.06] text-[#0F172A] mb-6"
           >
-            Ý thức xã hội phản hồi
+            Ý THỨC XÃ HỘI CÓ
             <br />
-            <span className="gradient-text-gold">trở lại tồn tại xã hội</span>
+            <span style={{ color: '#1D4ED8' }}>HOÀN TOÀN THỤ ĐỘNG KHÔNG?</span>
           </motion.h2>
+
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-body-lg text-white/60 max-w-2xl mx-auto"
+            transition={{ delay: 0.15, duration: 0.6 }}
+            className="text-lg text-stone-500 max-w-2xl mx-auto leading-8"
           >
-            Mối quan hệ biện chứng không chỉ một chiều. Ý thức xã hội — một khi đã hình thành — lại tác động trở lại, cải tạo tồn tại xã hội.
+            Tồn tại xã hội giữ vai trò quyết định. Tuy nhiên ý thức xã hội không hoàn toàn thụ động —
+            sau khi hình thành, nó có thể tác động trở lại đời sống xã hội thông qua hoạt động thực tiễn của con người.
           </motion.p>
         </div>
 
-        {/* Bidirectional arrow visual */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={isInView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col items-center gap-6 mb-20"
-        >
-          <div className="grid grid-cols-3 items-center gap-4 w-full max-w-3xl">
-            {/* Left: Tồn tại */}
-            <div className="col-start-1 col-end-2 flex justify-end">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ delay: 0.3 }}
-                className="bg-primary/15 border border-primary/30 rounded-2xl p-6 text-center"
-              >
-                <Home size={28} className="text-primary mx-auto mb-2" strokeWidth={1.5} />
-                <p className="text-sm font-bold text-white">Tồn tại xã hội</p>
-                <p className="text-xs text-white/40 mt-1">Điều kiện vật chất</p>
-              </motion.div>
-            </div>
+        {/* ── 2-column body ── */}
+        <div className="grid lg:grid-cols-[1fr_1fr] gap-10 xl:gap-14 items-start">
 
-            {/* Center: Bidirectional arrows */}
-            <div className="col-start-2 col-end-3 flex flex-col items-center gap-3">
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={isInView ? { opacity: 1 } : {}}
-                transition={{ delay: 0.5 }}
-                className="flex flex-col items-center gap-1"
-              >
-                <TrendingUp size={20} className="text-primary" />
-                <div className="w-0.5 h-8 bg-gradient-to-b from-primary to-gold" />
-                <TrendingUp size={20} className="text-gold rotate-180" />
-              </motion.div>
-            </div>
-
-            {/* Right: Ý thức */}
-            <div className="col-start-3 col-end-4 flex justify-start">
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ delay: 0.3 }}
-                className="bg-gold/10 border border-gold/30 rounded-2xl p-6 text-center"
-              >
-                <Brain size={28} className="text-gold mx-auto mb-2" strokeWidth={1.5} />
-                <p className="text-sm font-bold text-white">Ý thức xã hội</p>
-                <p className="text-xs text-white/40 mt-1">Tư tưởng, giá trị</p>
-              </motion.div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Explanation cards */}
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
+          {/* ════════════════════════════════════════════
+              LEFT: Interactive flow diagram
+              ════════════════════════════════════════════ */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.6 }}
-            className="bg-white/5 border border-white/10 backdrop-blur-sm rounded-2xl p-8"
+            transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:sticky lg:top-24"
           >
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center">
-                <TrendingUp size={20} className="text-primary" strokeWidth={1.5} />
+            <div className="rounded-[2rem] border border-slate-200 bg-white shadow-[0_20px_70px_rgba(29,78,216,0.08)] p-6 sm:p-8">
+              {/* diagram header */}
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: '#1D4ED8' }}>
+                  <Layers size={18} className="text-white" strokeWidth={1.8} />
+                </div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-600">Sơ đồ tương tác</p>
+                  <h3 className="font-bold text-[#0F172A] text-lg">Dòng chảy biện chứng</h3>
+                </div>
               </div>
-              <h3 className="font-bold text-white text-lg">Tác động xuôi</h3>
+
+              {/* nodes */}
+              <div className="flex flex-col items-stretch gap-0">
+                {FLOW_NODES.map((node, idx) => {
+                  const Icon = node.icon;
+                  const isActive = nodeForStep >= idx;
+                  const isExact = nodeForStep === idx;
+
+                  return (
+                    <div key={node.id} className="flex flex-col items-center">
+                      <motion.button
+                        onClick={() => setActiveNode(activeNode === idx ? -1 : idx)}
+                        whileHover={{ scale: 1.015 }}
+                        whileTap={{ scale: 0.99 }}
+                        animate={isExact ? { scale: [1, 1.02, 1] } : {}}
+                        transition={{ duration: 0.4 }}
+                        className={`w-full text-left rounded-2xl border-2 transition-all duration-500 p-5 ${
+                          isActive
+                            ? `${node.bgLight} ${node.border} shadow-md`
+                            : 'bg-slate-50 border-slate-200 opacity-40'
+                        } ${isExact ? `ring-2 ${node.ring} ring-offset-2` : ''}`}
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-500 ${isActive ? node.iconBg : 'bg-slate-200'}`}>
+                            <Icon size={22} className="text-white" strokeWidth={1.8} />
+                          </div>
+                          <div className="flex-1">
+                            <span className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: isActive ? node.color : '#94a3b8' }}>
+                              Bước {idx + 1}
+                            </span>
+                            <h4 className={`font-bold text-base leading-tight transition-colors duration-300 ${isActive ? 'text-[#0F172A]' : 'text-slate-400'}`}>
+                              {node.label}
+                            </h4>
+                            <p className={`text-xs mt-0.5 transition-colors duration-300 ${isActive ? 'text-slate-500' : 'text-slate-300'}`}>
+                              {node.sub}
+                            </p>
+                          </div>
+                          {isExact && (
+                            <motion.div
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                              className="w-3 h-3 rounded-full"
+                              style={{ background: node.color }}
+                            />
+                          )}
+                        </div>
+                      </motion.button>
+
+                      {/* connector arrow */}
+                      {idx < FLOW_NODES.length - 1 && (
+                        <div className="flex flex-col items-center py-2">
+                          <motion.div
+                            className="w-0.5 h-6 rounded-full transition-all duration-500"
+                            style={{ background: nodeForStep > idx ? node.color : '#e2e8f0' }}
+                            initial={{ scaleY: 0 }}
+                            animate={isInView ? { scaleY: 1 } : {}}
+                            transition={{ delay: 0.3 + idx * 0.1, duration: 0.4 }}
+                          />
+                          <motion.div
+                            animate={nodeForStep > idx ? { y: [0, 3, 0] } : {}}
+                            transition={{ duration: 1.2, repeat: Infinity }}
+                          >
+                            <ChevronDown
+                              size={16}
+                              strokeWidth={2.5}
+                              style={{ color: nodeForStep > idx ? node.color : '#cbd5e1' }}
+                            />
+                          </motion.div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Bottom note */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={isInView ? { opacity: 1 } : {}}
+                transition={{ delay: 1 }}
+                className="text-center text-xs text-slate-400 mt-6 font-medium tracking-wide"
+              >
+                Nhấn từng bước bên phải để xem sơ đồ thay đổi
+              </motion.p>
             </div>
-            <p className="text-sm text-white/70 leading-relaxed">
-              Tồn tại xã hội quyết định ý thức xã hội. Điều kiện sống vật chất định hình cách con người nhìn nhận thế giới, hình thành tư tưởng và giá trị của cả cộng đồng.
-            </p>
           </motion.div>
 
+          {/* ════════════════════════════════════════════
+              RIGHT: AI step-by-step cards
+              ════════════════════════════════════════════ */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="bg-white/5 border border-white/10 backdrop-blur-sm rounded-2xl p-8"
+            transition={{ duration: 0.65, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-gold/20 flex items-center justify-center">
-                <TrendingUp size={20} className="text-gold rotate-180" strokeWidth={1.5} />
+            {/* Panel header */}
+            <div className="rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 mb-6 flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-amber-500 flex items-center justify-center">
+                <Bot size={18} className="text-white" strokeWidth={1.8} />
               </div>
-              <h3 className="font-bold text-white text-lg">Tác động ngược</h3>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-700">Ví dụ thực tế</p>
+                <p className="text-sm font-bold text-[#0F172A]">AI &amp; ChatGPT</p>
+              </div>
+              <div className="ml-auto text-xs font-semibold text-amber-600 bg-white border border-amber-200 px-3 py-1 rounded-full">
+                {revealedSteps}/{AI_STEPS.length}
+              </div>
             </div>
-            <p className="text-sm text-white/70 leading-relaxed">
-              Ý thức xã hội phản hồi trở lại tồn tại xã hội. Con người dùng ý thức đã có để cải tạo điều kiện sống — tạo ra phương thức sản xuất mới, thay đổi quan hệ xã hội, thay đổi chính tồn tại của mình.
-            </p>
+
+            {/* Step cards — reveal one by one */}
+            <div className="flex flex-col gap-4">
+              <AnimatePresence initial={false}>
+                {AI_STEPS.slice(0, revealedSteps).map((step, idx) => {
+                  const isLast = idx === revealedSteps - 1;
+                  const isClickable = isLast && !allRevealed;
+                  return (
+                    <motion.div
+                      key={step.step}
+                      initial={{ opacity: 0, y: 20, scale: 0.97 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                      className={`relative overflow-hidden rounded-2xl border bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-300 ${
+                        isLast
+                          ? 'border-blue-300 shadow-[0_12px_40px_rgba(29,78,216,0.12)]'
+                          : 'border-slate-200'
+                      }`}
+                    >
+                      {/* image */}
+                      <div className="relative h-36 overflow-hidden">
+                        <img
+                          src={IMAGES[step.imgKey]}
+                          alt={step.imgAlt}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/70 via-[#0F172A]/20 to-transparent" />
+                        {/* step badge */}
+                        <div className="absolute top-3 left-3 flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-bold border border-white/30 bg-black/35 text-white backdrop-blur-sm">
+                          <span className="w-4 h-4 rounded-full bg-white text-[#0F172A] flex items-center justify-center text-[10px] font-black">
+                            {step.step}
+                          </span>
+                          <span className="uppercase tracking-wide">Bước {step.step}</span>
+                        </div>
+                        {/* label over image */}
+                        <div className="absolute bottom-3 left-4 right-4">
+                          <p className="font-bold text-white text-sm leading-tight">{step.label}</p>
+                        </div>
+                      </div>
+
+                      {/* connector below (except last revealed) */}
+                      {isLast && !allRevealed && (
+                        <motion.button
+                          onClick={handleStepClick}
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          className="w-full flex items-center justify-center gap-2 py-3 px-4 border-t border-blue-100 bg-blue-50 text-blue-700 text-sm font-semibold hover:bg-blue-100 transition-colors duration-200"
+                        >
+                          <span>Bước tiếp theo</span>
+                          <motion.span
+                            animate={{ y: [0, 3, 0] }}
+                            transition={{ duration: 1, repeat: Infinity }}
+                          >
+                            <ChevronDown size={16} strokeWidth={2.5} />
+                          </motion.span>
+                        </motion.button>
+                      )}
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
+
+              {/* Connector dots between cards */}
+              {!allRevealed && revealedSteps > 0 && (
+                <div className="flex justify-center py-1">
+                  <div className="flex flex-col items-center gap-1">
+                    {[...Array(3)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        animate={{ opacity: [0.3, 1, 0.3] }}
+                        transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.2 }}
+                        className="w-1.5 h-1.5 rounded-full bg-slate-300"
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* ── Conclusion — fades in after all steps revealed ── */}
+            <AnimatePresence>
+              {allRevealed && (
+                <motion.div
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                  className="mt-6 rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 to-sky-50 p-6 shadow-[0_16px_50px_rgba(29,78,216,0.10)]"
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center">
+                      <BookMarked size={16} className="text-white" strokeWidth={1.8} />
+                    </div>
+                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-700">Thông điệp</p>
+                  </div>
+                  <p className="text-[#0F172A] font-semibold text-base leading-7 mb-2">
+                    Ý thức xã hội không chỉ phản ánh hiện thực.
+                  </p>
+                  <p className="text-slate-600 text-sm leading-7">
+                    Khi được nhiều người tiếp nhận và biến thành hành động thực tiễn, nó có thể tạo ra những thay đổi thực sự trong đời sống xã hội.
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         </div>
 
-        {/* Quote */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-          className="text-center"
-        >
-          <blockquote className="font-serif italic text-display-sm text-white/70 leading-snug mb-4">
-            "Thực tiễn xã hội là tiêu chuẩn kiểm nghiệm duy nhất cho tính chân lý của nhận thức."
-          </blockquote>
-          <p className="text-sm text-white/40">— Triết học Marx Lenin</p>
-        </motion.div>
       </div>
     </section>
   );
@@ -1147,94 +1761,12 @@ function FeedbackSection() {
 // ══════════════════════════════════════════════════════════════════════════
 // SECTION 10: CONCLUSION
 // ══════════════════════════════════════════════════════════════════════════
-function ConclusionSection() {
-  return (
-    <section id="conclusion" className="relative py-36 bg-cream overflow-hidden">
-      <div className="absolute inset-0 dot-grid opacity-30" />
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-      <div className="absolute top-1/4 right-0 w-96 h-96 rounded-full bg-primary/4 blur-3xl" />
-
-      <div className="relative max-w-4xl mx-auto px-6 text-center">
-        <SectionLabel icon={Eye}>Suy ngẫm</SectionLabel>
-
-        <motion.h2
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="font-heading text-display-xl text-text-heading mt-6 mb-8 leading-tight"
-        >
-          Bao nhiêu phần trăm suy nghĩ của bạn
-          <br />
-          <span className="gradient-text-red">thực sự là của bạn?</span>
-        </motion.h2>
-
-        <div className="flex flex-col items-center gap-3 mb-20">
-          {[
-            { label: 'Ý thức xã hội', sublabel: 'Hệ tư tưởng, giá trị, tâm lý', icon: Globe, color: 'bg-gold/10 border-gold/25 text-gold' },
-            { label: 'Kinh nghiệm sống', sublabel: 'Quan hệ, sự kiện, môi trường', icon: Users, color: 'bg-primary/10 border-primary/20 text-primary' },
-            { label: 'Hoàn cảnh vật chất', sublabel: 'Thu nhập, nhà ở, công việc', icon: DollarSign, color: 'bg-stone-100 border-stone-200 text-text-heading' },
-            { label: 'Tồn tại xã hội', sublabel: 'Phương thức sản xuất, địa lý, dân số', icon: Layers, color: 'bg-stone-200 border-stone-300 text-text-heading' },
-          ].map((item, idx) => {
-            const Icon = item.icon;
-            const widths = ['w-64', 'w-72', 'w-80', 'w-96'];
-            return (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: -16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="relative"
-              >
-                {idx < 3 && (
-                  <div className="absolute -top-6 left-1/2 -translate-x-1/2 z-10 hidden md:flex items-center justify-center">
-                    <motion.div
-                      animate={{ y: [-2, 2, -2] }}
-                      transition={{ repeat: Infinity, duration: 1.5, delay: idx * 0.2 }}
-                    >
-                      <ChevronDown size={16} className="text-primary/50" />
-                    </motion.div>
-                  </div>
-                )}
-                <motion.div
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  className={`${widths[idx]} mx-auto px-6 py-4 rounded-2xl border transition-all duration-200 ${item.color}`}
-                >
-                  <div className="flex items-center justify-center gap-3">
-                    <Icon size={18} strokeWidth={1.5} />
-                    <div className="text-left">
-                      <p className="font-bold text-sm">{item.label}</p>
-                      <p className="text-sm opacity-70">{item.sublabel}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              </motion.div>
-            );
-          })}
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
-          className="max-w-2xl mx-auto"
-        >
-          <Quote size={32} className="text-primary/30 mx-auto mb-4" />
-          <blockquote className="font-serif italic text-display-sm text-muted leading-snug mb-6">
-            "Con người là sản phẩm của hoàn cảnh và giáo dục."
-          </blockquote>
-          <p className="text-sm text-muted">— Karl Marx</p>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
 
 // ══════════════════════════════════════════════════════════════════════════
 // SECTION 11: APPENDIX — AI USAGE & ACADEMIC INTEGRITY
 // ══════════════════════════════════════════════════════════════════════════
+
+
 function AppendixSection() {
   const [activeTab, setActiveTab] = useState(0);
 
@@ -1403,7 +1935,7 @@ function AppendixSection() {
           >
             AI Usage & Academic Integrity
           </motion.h2>
-          <motion.p
+            <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -1437,7 +1969,7 @@ function AppendixSection() {
 
         {/* Tab content */}
         <AnimatePresence mode="wait">
-          <motion.div
+            <motion.div
             key={activeTab}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1490,10 +2022,10 @@ function Footer() {
     <footer className="bg-stone-900 border-t border-white/5 py-12">
       <div className="max-w-5xl mx-auto px-6 text-center">
         <div className="flex items-center justify-center gap-2.5 mb-6">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-gold">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center shadow-gold">
             <Star size={14} className="text-gold fill-gold" />
           </div>
-          <span className="font-heading text-lg text-white">MarxMind</span>
+            <span className="font-heading text-lg text-white">MarxMind</span>
         </div>
         <p className="text-sm text-white/40 mb-3">
           Lý thuyết Duy vật Biện chứng Lịch sử — Triết học Marx Lenin
@@ -1515,15 +2047,15 @@ export default function App() {
       <Navbar />
       <main>
         <HeroSection />
+        <ConditionedThoughtSection />
         <OpeningQuestion />
         <MarxQuote />
         <SocialExistence />
         <SocialConsciousness />
         <DialecticalRelationship />
         <SocialMediaSection />
-        <AISection />
+
         <FeedbackSection />
-        <ConclusionSection />
         <AppendixSection />
       </main>
       <Footer />
