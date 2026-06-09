@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+﻿import { useState, useRef } from 'react';
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from 'framer-motion';
 import {
   ChevronDown, Quote, ArrowRight, Brain, Layers,
@@ -28,12 +28,12 @@ const IMAGES = {
   tiktok: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d?w=1200&q=80&auto=format&fit=crop',
   ai: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80&auto=format&fit=crop',
   // AI step images
-  aiBrain: 'https://images.unsplash.com/photo-1676573704285-d38fdb797461?w=800&q=80&auto=format&fit=crop',
-  aiStudent: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80&auto=format&fit=crop',
-  aiBusiness: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80&auto=format&fit=crop',
-  aiEngineer: 'https://images.unsplash.com/photo-1629904853893-c2c8981a1dc5?w=800&q=80&auto=format&fit=crop',
-  aiWorkplace: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80&auto=format&fit=crop',
-  aiSociety: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&q=80&auto=format&fit=crop',
+  aiBrain: '/assets/ai-step-1.png',
+  aiStudent: '/assets/ai-step-2.png',
+  aiBusiness: '/assets/ai-step-3.png',
+  aiEngineer: '/assets/ai-step-4.png',
+  aiWorkplace: '/assets/ai-step-5.png',
+  aiSociety: '/assets/ai-step-6.png',
 };
 
 
@@ -1409,39 +1409,39 @@ const AI_STEPS = [
   {
     step: 1,
     label: 'AI xuất hiện',
-    image: null, // resolved via IMAGES.aiBrain
+    image: null,
     imgKey: 'aiBrain',
-    imgAlt: 'AI brain & ChatGPT concept',
+    imgAlt: 'Slide minh hoạ AI và ChatGPT xuất hiện trong đời sống',
   },
   {
     step: 2,
     label: 'Con người nhận thức được lợi ích của AI',
     imgKey: 'aiStudent',
-    imgAlt: 'Sinh viên học cùng AI',
+    imgAlt: 'Slide nội dung học thuật về AI và nhận thức con người',
   },
   {
     step: 3,
     label: 'Trường học và doanh nghiệp ứng dụng AI',
     imgKey: 'aiBusiness',
-    imgAlt: 'Doanh nghiệp ứng dụng AI',
+    imgAlt: 'Slide minh hoạ công nghệ và ứng dụng AI trong đời sống',
   },
   {
     step: 4,
     label: 'Xuất hiện kỹ năng và ngành nghề mới',
     imgKey: 'aiEngineer',
-    imgAlt: 'Prompt Engineer / AI Engineer',
+    imgAlt: 'Slide minh hoạ dữ liệu và sự thay đổi thị trường lao động',
   },
   {
     step: 5,
     label: 'Thị trường lao động thay đổi',
     imgKey: 'aiWorkplace',
-    imgAlt: 'Môi trường làm việc mới',
+    imgAlt: 'Slide biểu đồ thay đổi xã hội do AI',
   },
   {
     step: 6,
     label: 'Xã hội thay đổi',
     imgKey: 'aiSociety',
-    imgAlt: 'Xã hội số hiện đại',
+    imgAlt: 'Slide minh hoạ xã hội thay đổi toàn diện',
   },
 ];
 
@@ -1452,15 +1452,17 @@ function FeedbackSection() {
   // flow diagram: which node is active (-1 = none)
   const [activeNode, setActiveNode] = useState(-1);
 
-  // AI steps: how many steps are revealed (0 = only step 1 shown)
+  // AI steps: how many steps revealed (1 = step 1 shown, 6 = all shown)
   const [revealedSteps, setRevealedSteps] = useState(1);
   const allRevealed = revealedSteps >= AI_STEPS.length;
 
-  const handleStepClick = () => {
+  const handleNextStep = () => {
     if (!allRevealed) setRevealedSteps((s) => s + 1);
   };
 
-  // sync active node with revealed steps
+  const handlePrevStep = () => {
+    if (revealedSteps > 1) setRevealedSteps((s) => s - 1);
+  };
   const nodeForStep = Math.min(Math.floor(((revealedSteps - 1) / (AI_STEPS.length - 1)) * (FLOW_NODES.length - 1)), FLOW_NODES.length - 1);
 
   return (
@@ -1648,82 +1650,342 @@ function FeedbackSection() {
               </div>
             </div>
 
-            {/* Step cards — reveal one by one */}
-            <div className="flex flex-col gap-4">
-              <AnimatePresence initial={false}>
-                {AI_STEPS.slice(0, revealedSteps).map((step, idx) => {
-                  const isLast = idx === revealedSteps - 1;
-                  const isClickable = isLast && !allRevealed;
-                  return (
+            {/* Step cards — 2-column flow, reveal one step at a time */}
+            <div className="flex flex-col gap-0">
+
+              {/* ── Row 1: step 1 → step 2 ── */}
+              <div className="grid grid-cols-2 gap-3">
+                {/* Step 1 */}
+                <AnimatePresence>
+                  {revealedSteps >= 1 && (
                     <motion.div
-                      key={step.step}
-                      initial={{ opacity: 0, y: 20, scale: 0.97 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                      className={`relative overflow-hidden rounded-2xl border bg-white shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-300 ${
-                        isLast
-                          ? 'border-blue-300 shadow-[0_12px_40px_rgba(29,78,216,0.12)]'
-                          : 'border-slate-200'
-                      }`}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                      className="relative overflow-hidden rounded-2xl border bg-white shadow-[0_6px_24px_rgba(15,23,42,0.06)]"
                     >
-                      {/* image */}
-                      <div className="relative h-36 overflow-hidden">
+                      <div className="relative w-full bg-slate-100">
                         <img
-                          src={IMAGES[step.imgKey]}
-                          alt={step.imgAlt}
-                          className="w-full h-full object-cover"
+                          src={IMAGES[AI_STEPS[0].imgKey]}
+                          alt={AI_STEPS[0].imgAlt}
+                          className="w-full object-contain"
+                          style={{ height: 'auto', maxHeight: '14rem' }}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A]/70 via-[#0F172A]/20 to-transparent" />
-                        {/* step badge */}
-                        <div className="absolute top-3 left-3 flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-bold border border-white/30 bg-black/35 text-white backdrop-blur-sm">
-                          <span className="w-4 h-4 rounded-full bg-white text-[#0F172A] flex items-center justify-center text-[10px] font-black">
-                            {step.step}
-                          </span>
-                          <span className="uppercase tracking-wide">Bước {step.step}</span>
+                      </div>
+                      <div className="p-3 sm:p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-600 text-xs font-black">
+                            {AI_STEPS[0].step}
+                          </div>
+                          <p className="font-bold text-[#0F172A] text-sm leading-tight">{AI_STEPS[0].label}</p>
                         </div>
-                        {/* label over image */}
-                        <div className="absolute bottom-3 left-4 right-4">
-                          <p className="font-bold text-white text-sm leading-tight">{step.label}</p>
+                        <div className="flex items-center justify-end gap-2">
+                          {revealedSteps > 1 && (
+                            <motion.button
+                              onClick={handlePrevStep}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="text-xs text-slate-400 hover:text-blue-600 transition-colors"
+                            >
+                              ← Trước
+                            </motion.button>
+                          )}
+                          {revealedSteps === 1 && !allRevealed && (
+                            <motion.button
+                              onClick={handleNextStep}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="ml-auto text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-lg transition-colors"
+                            >
+                              Tiếp →
+                            </motion.button>
+                          )}
                         </div>
                       </div>
-
-                      {/* connector below (except last revealed) */}
-                      {isLast && !allRevealed && (
-                        <motion.button
-                          onClick={handleStepClick}
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          className="w-full flex items-center justify-center gap-2 py-3 px-4 border-t border-blue-100 bg-blue-50 text-blue-700 text-sm font-semibold hover:bg-blue-100 transition-colors duration-200"
-                        >
-                          <span>Bước tiếp theo</span>
-                          <motion.span
-                            animate={{ y: [0, 3, 0] }}
-                            transition={{ duration: 1, repeat: Infinity }}
-                          >
-                            <ChevronDown size={16} strokeWidth={2.5} />
-                          </motion.span>
-                        </motion.button>
-                      )}
                     </motion.div>
-                  );
-                })}
-              </AnimatePresence>
+                  )}
+                </AnimatePresence>
 
-              {/* Connector dots between cards */}
-              {!allRevealed && revealedSteps > 0 && (
-                <div className="flex justify-center py-1">
-                  <div className="flex flex-col items-center gap-1">
-                    {[...Array(3)].map((_, i) => (
-                      <motion.div
-                        key={i}
-                        animate={{ opacity: [0.3, 1, 0.3] }}
-                        transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.2 }}
-                        className="w-1.5 h-1.5 rounded-full bg-slate-300"
-                      />
-                    ))}
+                {/* Step 2 */}
+                <AnimatePresence>
+                  {revealedSteps >= 2 && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                      className="relative overflow-hidden rounded-2xl border bg-white shadow-[0_6px_24px_rgba(15,23,42,0.06)]"
+                    >
+                      <div className="relative w-full bg-slate-100">
+                        <img
+                          src={IMAGES[AI_STEPS[1].imgKey]}
+                          alt={AI_STEPS[1].imgAlt}
+                          className="w-full object-contain"
+                          style={{ height: 'auto', maxHeight: '14rem' }}
+                        />
+                      </div>
+                      <div className="p-3 sm:p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-600 text-xs font-black">
+                            {AI_STEPS[1].step}
+                          </div>
+                          <p className="font-bold text-[#0F172A] text-sm leading-tight">{AI_STEPS[1].label}</p>
+                        </div>
+                        <div className="flex items-center justify-end gap-2">
+                          {revealedSteps > 2 ? (
+                            <motion.button
+                              onClick={handlePrevStep}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="text-xs text-slate-400 hover:text-blue-600 transition-colors"
+                            >
+                              ← Trước
+                            </motion.button>
+                          ) : (
+                            <div className="flex-1" />
+                          )}
+                          {revealedSteps === 2 && !allRevealed && (
+                            <motion.button
+                              onClick={handleNextStep}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="ml-auto text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-lg transition-colors"
+                            >
+                              Tiếp →
+                            </motion.button>
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* ── Row 2: step 4 ← step 3 ── */}
+              {revealedSteps > 2 && (
+                <AnimatePresence>
+                  <div className="grid grid-cols-2 gap-3 mt-3">
+                    {/* Step 4 (left) */}
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                      className="relative overflow-hidden rounded-2xl border bg-white shadow-[0_6px_24px_rgba(15,23,42,0.06)]"
+                    >
+                      <div className="relative w-full bg-slate-100">
+                        <img
+                          src={IMAGES[AI_STEPS[3].imgKey]}
+                          alt={AI_STEPS[3].imgAlt}
+                          className="w-full object-contain"
+                          style={{ height: 'auto', maxHeight: '14rem' }}
+                        />
+                      </div>
+                      <div className="p-3 sm:p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-600 text-xs font-black">
+                            {AI_STEPS[3].step}
+                          </div>
+                          <p className="font-bold text-[#0F172A] text-sm leading-tight">{AI_STEPS[3].label}</p>
+                        </div>
+                        <div className="flex items-center justify-end gap-2">
+                          {revealedSteps > 4 ? (
+                            <motion.button
+                              onClick={handlePrevStep}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="text-xs text-slate-400 hover:text-blue-600 transition-colors"
+                            >
+                              ← Trước
+                            </motion.button>
+                          ) : (
+                            <div className="flex-1" />
+                          )}
+                          {revealedSteps === 4 && !allRevealed && (
+                            <motion.button
+                              onClick={handleNextStep}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="ml-auto text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-lg transition-colors"
+                            >
+                              Tiếp →
+                            </motion.button>
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+
+                    {/* Step 3 (right) */}
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                      className="relative overflow-hidden rounded-2xl border bg-white shadow-[0_6px_24px_rgba(15,23,42,0.06)]"
+                    >
+                      <div className="relative w-full bg-slate-100">
+                        <img
+                          src={IMAGES[AI_STEPS[2].imgKey]}
+                          alt={AI_STEPS[2].imgAlt}
+                          className="w-full object-contain"
+                          style={{ height: 'auto', maxHeight: '14rem' }}
+                        />
+                      </div>
+                      <div className="p-3 sm:p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-600 text-xs font-black">
+                            {AI_STEPS[2].step}
+                          </div>
+                          <p className="font-bold text-[#0F172A] text-sm leading-tight">{AI_STEPS[2].label}</p>
+                        </div>
+                        <div className="flex items-center justify-end gap-2">
+                          {revealedSteps > 4 ? (
+                            <motion.button
+                              onClick={handlePrevStep}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="text-xs text-slate-400 hover:text-blue-600 transition-colors"
+                            >
+                              ← Trước
+                            </motion.button>
+                          ) : (
+                            <div className="flex-1" />
+                          )}
+                          {revealedSteps === 3 && !allRevealed && (
+                            <motion.button
+                              onClick={handleNextStep}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="ml-auto text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-lg transition-colors"
+                            >
+                              Tiếp →
+                            </motion.button>
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
                   </div>
-                </div>
+                </AnimatePresence>
               )}
+
+              {/* ── Row 3: step 5 → step 6 ── */}
+              {revealedSteps > 4 && (
+                <AnimatePresence>
+                  <div className="grid grid-cols-2 gap-3 mt-3">
+                    {/* Step 5 */}
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                      className="relative overflow-hidden rounded-2xl border bg-white shadow-[0_6px_24px_rgba(15,23,42,0.06)]"
+                    >
+                      <div className="relative w-full bg-slate-100">
+                        <img
+                          src={IMAGES[AI_STEPS[4].imgKey]}
+                          alt={AI_STEPS[4].imgAlt}
+                          className="w-full object-contain"
+                          style={{ height: 'auto', maxHeight: '14rem' }}
+                        />
+                      </div>
+                      <div className="p-3 sm:p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-600 text-xs font-black">
+                            {AI_STEPS[4].step}
+                          </div>
+                          <p className="font-bold text-[#0F172A] text-sm leading-tight">{AI_STEPS[4].label}</p>
+                        </div>
+                        <div className="flex items-center justify-end gap-2">
+                          {revealedSteps > 6 ? (
+                            <motion.button
+                              onClick={handlePrevStep}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="text-xs text-slate-400 hover:text-blue-600 transition-colors"
+                            >
+                              ← Trước
+                            </motion.button>
+                          ) : (
+                            <div className="flex-1" />
+                          )}
+                          {revealedSteps === 5 && !allRevealed && (
+                            <motion.button
+                              onClick={handleNextStep}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="ml-auto text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-lg transition-colors"
+                            >
+                              Tiếp →
+                            </motion.button>
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+
+                    {/* Step 6 */}
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                      className="relative overflow-hidden rounded-2xl border bg-white shadow-[0_6px_24px_rgba(15,23,42,0.06)]"
+                    >
+                      <div className="relative w-full bg-slate-100">
+                        <img
+                          src={IMAGES[AI_STEPS[5].imgKey]}
+                          alt={AI_STEPS[5].imgAlt}
+                          className="w-full object-contain"
+                          style={{ height: 'auto', maxHeight: '14rem' }}
+                        />
+                      </div>
+                      <div className="p-3 sm:p-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-600 text-xs font-black">
+                            {AI_STEPS[5].step}
+                          </div>
+                          <p className="font-bold text-[#0F172A] text-sm leading-tight">{AI_STEPS[5].label}</p>
+                        </div>
+                        <div className="flex items-center justify-end gap-2">
+                          {revealedSteps > 6 && (
+                            <motion.button
+                              onClick={handlePrevStep}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="text-xs text-slate-400 hover:text-blue-600 transition-colors"
+                            >
+                              ← Trước
+                            </motion.button>
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  </div>
+                </AnimatePresence>
+              )}
+
             </div>
 
             {/* ── Conclusion — fades in after all steps revealed ── */}
